@@ -24,9 +24,9 @@ export default function Home() {
   const featuredAds = ads.slice(0, 6);
 
   return (
-    <div>
+    <div className="bg-secondary-900">
       {/* Hero Section */}
-      <section className="bg-blue-600 text-white py-20">
+      <section className="bg-gradient-to-br from-secondary-800 to-secondary-900 text-white py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
             Find What You Need, Sell What You Don&apos;t
@@ -38,13 +38,13 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
               href="/ads"
-              className="px-8 py-4 bg-white text-blue-600 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors"
+              className="px-8 py-4 bg-secondary-700 text-white rounded-lg font-bold text-lg hover:bg-secondary-600 transition-colors shadow-lg"
             >
               Browse Ads
             </Link>
             <Link
               href={isAuthenticated ? "/ads/create" : "/login"}
-              className="px-8 py-4 bg-blue-700 text-white rounded-lg font-bold text-lg hover:bg-blue-800 transition-colors"
+              className="px-8 py-4 bg-primary-600 text-white rounded-lg font-bold text-lg hover:bg-primary-500 transition-colors shadow-lg"
             >
               {isAuthenticated ? "Post an Ad" : "Login to Post"}
             </Link>
@@ -53,9 +53,9 @@ export default function Home() {
       </section>
 
       {/* Categories Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-secondary-800">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">
+          <h2 className="text-3xl font-bold text-center mb-12 text-white">
             Popular Categories
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -72,12 +72,12 @@ export default function Home() {
               <Link
                 key={category}
                 href={`/ads?category=${category}`}
-                className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow"
+                className="bg-secondary-700 rounded-lg shadow-lg p-6 text-center hover:bg-secondary-600 transition-all duration-300 transform hover:-translate-y-1 border-l-4 border-primary-500"
               >
-                <h3 className="text-xl font-semibold text-gray-800">
+                <h3 className="text-xl font-semibold text-white">
                   {category}
                 </h3>
-                <p className="text-gray-500 mt-2">Browse {category}</p>
+                <p className="text-gray-300 mt-2">Browse {category}</p>
               </Link>
             ))}
           </div>
@@ -85,13 +85,13 @@ export default function Home() {
       </section>
 
       {/* Featured Ads Section */}
-      <section className="py-16">
+      <section className="py-16 bg-secondary-900">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-10">
-            <h2 className="text-3xl font-bold">Recent Listings</h2>
+            <h2 className="text-3xl font-bold text-white">Recent Listings</h2>
             <Link
               href="/ads"
-              className="text-blue-600 hover:text-blue-800 font-semibold"
+              className="text-primary-400 hover:text-primary-300 font-semibold"
             >
               View All
             </Link>
@@ -99,10 +99,10 @@ export default function Home() {
 
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
             </div>
           ) : error ? (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <div className="bg-red-900 border border-red-700 text-red-100 px-4 py-3 rounded">
               <p>{error}</p>
             </div>
           ) : featuredAds.length > 0 ? (
@@ -112,13 +112,13 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12">
-              <p className="text-gray-600 text-lg mb-6">
+            <div className="text-center py-12 bg-secondary-800 rounded-lg shadow-xl">
+              <p className="text-gray-300 text-lg mb-6">
                 No advertisements yet.
               </p>
               <Link
                 href={isAuthenticated ? "/ads/create" : "/login"}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors"
+                className="px-6 py-3 bg-primary-600 text-white rounded-lg font-bold hover:bg-primary-500 transition-colors shadow-lg"
               >
                 {isAuthenticated ? "Post the First Ad" : "Login to Post"}
               </Link>
@@ -128,34 +128,34 @@ export default function Home() {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-secondary-800">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-white">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+            <div className="text-center bg-secondary-700 p-8 rounded-lg shadow-lg">
+              <div className="bg-primary-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-md">
                 1
               </div>
-              <h3 className="text-xl font-semibold mb-2">Create an Account</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold mb-2 text-white">Create an Account</h3>
+              <p className="text-gray-300">
                 Sign up for free and verify your email to get started.
               </p>
             </div>
-            <div className="text-center">
-              <div className="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+            <div className="text-center bg-secondary-700 p-8 rounded-lg shadow-lg">
+              <div className="bg-primary-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-md">
                 2
               </div>
-              <h3 className="text-xl font-semibold mb-2">Post Your Ad</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold mb-2 text-white">Post Your Ad</h3>
+              <p className="text-gray-300">
                 Add photos, description, set price and location.
               </p>
             </div>
-            <div className="text-center">
-              <div className="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+            <div className="text-center bg-secondary-700 p-8 rounded-lg shadow-lg">
+              <div className="bg-primary-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-md">
                 3
               </div>
-              <h3 className="text-xl font-semibold mb-2">Make a Deal</h3>
-              <p className="text-gray-600">
+              <h3 className="text-xl font-semibold mb-2 text-white">Make a Deal</h3>
+              <p className="text-gray-300">
                 Respond to inquiries and complete your sale.
               </p>
             </div>
@@ -164,7 +164,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-blue-600 text-white">
+      <section className="py-20 bg-gradient-to-br from-primary-900 to-secondary-900 text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
@@ -172,7 +172,7 @@ export default function Home() {
           </p>
           <Link
             href={isAuthenticated ? "/ads/create" : "/register"}
-            className="px-8 py-4 bg-white text-blue-600 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors"
+            className="px-8 py-4 bg-primary-600 text-white rounded-lg font-bold text-lg hover:bg-primary-500 transition-colors shadow-lg"
           >
             {isAuthenticated ? "Post an Ad Now" : "Register for Free"}
           </Link>

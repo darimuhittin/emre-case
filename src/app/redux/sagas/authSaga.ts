@@ -1,4 +1,4 @@
-import { takeLatest, put, call } from "redux-saga/effects";
+import { call, put, takeLatest, PutEffect } from "redux-saga/effects";
 import {
   loginRequest,
   loginSuccess,
@@ -15,7 +15,7 @@ import { LoginCredentials, RegisterCredentials } from "../../types";
 import api from "../../services/api";
 
 // Define common return types for sagas
-type SagaEffect = ReturnType<typeof call> | ReturnType<typeof put>;
+type SagaEffect = ReturnType<typeof call> | PutEffect<any>;
 
 // Login saga
 function* loginSaga(

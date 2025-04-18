@@ -13,22 +13,28 @@ const MOCK_ADS_KEY = "mock_ads";
 
 // Load mock data from localStorage if available
 const loadMockUsers = (): User[] => {
+  if (typeof window === "undefined") return [];
   const storedUsers = localStorage.getItem(MOCK_USERS_KEY);
   return storedUsers ? JSON.parse(storedUsers) : [];
 };
 
 const loadMockAds = (): Ad[] => {
+  if (typeof window === "undefined") return [];
   const storedAds = localStorage.getItem(MOCK_ADS_KEY);
   return storedAds ? JSON.parse(storedAds) : [];
 };
 
 // Save mock data to localStorage
 const saveMockUsers = (users: User[]) => {
-  localStorage.setItem(MOCK_USERS_KEY, JSON.stringify(users));
+  if (typeof window !== "undefined") {
+    localStorage.setItem(MOCK_USERS_KEY, JSON.stringify(users));
+  }
 };
 
 const saveMockAds = (ads: Ad[]) => {
-  localStorage.setItem(MOCK_ADS_KEY, JSON.stringify(ads));
+  if (typeof window !== "undefined") {
+    localStorage.setItem(MOCK_ADS_KEY, JSON.stringify(ads));
+  }
 };
 
 // Initialize with some data if empty
@@ -225,9 +231,9 @@ const ads = {
       images:
         adData.images.length > 0
           ? [
-              "https://via.placeholder.com/800x600",
-              "https://via.placeholder.com/800x600",
-            ]
+            "https://via.placeholder.com/800x600",
+            "https://via.placeholder.com/800x600",
+          ]
           : [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

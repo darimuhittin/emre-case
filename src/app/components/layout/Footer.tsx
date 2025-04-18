@@ -5,12 +5,12 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-800 text-white pt-10 pb-6">
+    <footer className="bg-secondary-900 text-white pt-10 pb-6">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo and description */}
           <div className="col-span-1 md:col-span-2">
-            <Link href="/" className="text-2xl font-bold text-white">
+            <Link href="/" className="text-2xl font-bold text-primary-500">
               AdPlatform
             </Link>
             <p className="mt-3 text-gray-400">
@@ -22,28 +22,30 @@ const Footer: React.FC = () => {
 
           {/* Quick links */}
           <div>
-            <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-3 text-white border-b border-secondary-700 pb-2">
+              Quick Links
+            </h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="text-gray-400 hover:text-white">
+                <Link href="/" className="text-gray-400 hover:text-primary-400 transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/ads" className="text-gray-400 hover:text-white">
+                <Link href="/ads" className="text-gray-400 hover:text-primary-400 transition-colors">
                   Browse Ads
                 </Link>
               </li>
               <li>
                 <Link
                   href="/ads/create"
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-primary-400 transition-colors"
                 >
                   Post an Ad
                 </Link>
               </li>
               <li>
-                <Link href="/my-ads" className="text-gray-400 hover:text-white">
+                <Link href="/my-ads" className="text-gray-400 hover:text-primary-400 transition-colors">
                   My Ads
                 </Link>
               </li>
@@ -52,17 +54,19 @@ const Footer: React.FC = () => {
 
           {/* Account */}
           <div>
-            <h3 className="text-lg font-semibold mb-3">Account</h3>
+            <h3 className="text-lg font-semibold mb-3 text-white border-b border-secondary-700 pb-2">
+              Account
+            </h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/login" className="text-gray-400 hover:text-white">
+                <Link href="/login" className="text-gray-400 hover:text-primary-400 transition-colors">
                   Login
                 </Link>
               </li>
               <li>
                 <Link
                   href="/register"
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-primary-400 transition-colors"
                 >
                   Register
                 </Link>
@@ -70,7 +74,7 @@ const Footer: React.FC = () => {
               <li>
                 <Link
                   href="/profile"
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-primary-400 transition-colors"
                 >
                   My Profile
                 </Link>
@@ -80,14 +84,14 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-gray-700 mt-8 pt-6">
+        <div className="border-t border-secondary-800 mt-8 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
               &copy; {currentYear} AdPlatform. All rights reserved.
             </p>
             <div className="mt-4 md:mt-0">
               <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-white">
+                <a href="#" className="text-gray-400 hover:text-primary-400 transition-colors">
                   <span className="sr-only">Facebook</span>
                   <svg
                     className="h-6 w-6"
@@ -102,7 +106,7 @@ const Footer: React.FC = () => {
                     />
                   </svg>
                 </a>
-                <a href="#" className="text-gray-400 hover:text-white">
+                <a href="#" className="text-gray-400 hover:text-primary-400 transition-colors">
                   <span className="sr-only">Twitter</span>
                   <svg
                     className="h-6 w-6"
@@ -113,7 +117,7 @@ const Footer: React.FC = () => {
                     <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
                   </svg>
                 </a>
-                <a href="#" className="text-gray-400 hover:text-white">
+                <a href="#" className="text-gray-400 hover:text-primary-400 transition-colors">
                   <span className="sr-only">Instagram</span>
                   <svg
                     className="h-6 w-6"
