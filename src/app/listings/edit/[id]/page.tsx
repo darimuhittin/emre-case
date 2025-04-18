@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { RootState } from "../../../redux/store";
-import AdForm from "../../../components/ads/AdForm";
+import AdForm from "../../../components/listings/AdForm";
 import { getAdRequest } from "../../../redux/slices/adsSlice";
 
 interface EditAdPageProps {

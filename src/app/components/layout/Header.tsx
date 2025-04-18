@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { RootState } from "../../redux/store";
-import { logout } from "../../redux/slices/authSlice";
+import { logoutRequest } from "../../redux/sagas/authSaga";
 
 const Header: React.FC = () => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logoutRequest());
     router.push("/");
   };
 

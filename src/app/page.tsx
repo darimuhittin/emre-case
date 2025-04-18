@@ -3,25 +3,28 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
-import { fetchAdsRequest } from "./redux/slices/adsSlice";
 import { RootState } from "./redux/store";
-import AdCard from "./components/ads/AdCard";
-import { Ad } from "./types";
+import ListingCard from "./components/listings/ListingCard";
+import { Listing } from "./types";
+import { fetchListingsRequest } from "./redux/slices/listingsSlice";
+import { fetchCategoriesRequest } from "./redux/sagas/categoriesSaga";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const { ads, isLoading, error } = useSelector(
-    (state: RootState) => state.ads
+  const { listings, isLoading, error } = useSelector(
+    (state: RootState) => state.listings
   );
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { categories } = useSelector((state: RootState) => state.categories);
 
-  // Fetch ads on component mount
+  // Fetch listings on component mount
   useEffect(() => {
-    dispatch(fetchAdsRequest());
+    dispatch(fetchListingsRequest({ page: 1 }));
+    dispatch(fetchCategoriesRequest());
   }, [dispatch]);
 
-  // Get featured/recent ads - for the home page, we'll just show the most recent 6
-  const featuredAds = ads.slice(0, 6);
+  // Get featured/recent listings - for the home page, we'll just show the most recent 6
+  const featuredListings = listings.slice(0, 6);
 
   return (
     <div className="bg-secondary-900">
@@ -37,16 +40,16 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
-              href="/ads"
+              href="/listings"
               className="px-8 py-4 bg-secondary-700 text-white rounded-lg font-bold text-lg hover:bg-secondary-600 transition-colors shadow-lg"
             >
-              Browse Ads
+              Browse Listings
             </Link>
             <Link
-              href={isAuthenticated ? "/ads/create" : "/login"}
+              href={isAuthenticated ? "/listings/create" : "/login"}
               className="px-8 py-4 bg-primary-600 text-white rounded-lg font-bold text-lg hover:bg-primary-500 transition-colors shadow-lg"
             >
-              {isAuthenticated ? "Post an Ad" : "Login to Post"}
+              {isAuthenticated ? "Post a Listing" : "Login to Post"}
             </Link>
           </div>
         </div>
@@ -59,38 +62,29 @@ export default function Home() {
             Popular Categories
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              "Electronics",
-              "Vehicles",
-              "Real Estate",
-              "Furniture",
-              "Clothing",
-              "Services",
-              "Jobs",
-              "Other",
-            ].map((category) => (
+            {categories?.map((category) => (
               <Link
-                key={category}
-                href={`/ads?category=${category}`}
+                key={category.id}
+                href={`/listings?category=${category.id}`}
                 className="bg-secondary-700 rounded-lg shadow-lg p-6 text-center hover:bg-secondary-600 transition-all duration-300 transform hover:-translate-y-1 border-l-4 border-primary-500"
               >
                 <h3 className="text-xl font-semibold text-white">
-                  {category}
+                  {category.name}
                 </h3>
-                <p className="text-gray-300 mt-2">Browse {category}</p>
+                <p className="text-gray-300 mt-2">Browse {category.name}</p>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Featured Ads Section */}
+      {/* Featured Listings Section */}
       <section className="py-16 bg-secondary-900">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-10">
             <h2 className="text-3xl font-bold text-white">Recent Listings</h2>
             <Link
-              href="/ads"
+              href="/listings"
               className="text-primary-400 hover:text-primary-300 font-semibold"
             >
               View All
@@ -105,22 +99,22 @@ export default function Home() {
             <div className="bg-red-900 border border-red-700 text-red-100 px-4 py-3 rounded">
               <p>{error}</p>
             </div>
-          ) : featuredAds.length > 0 ? (
+          ) : featuredListings.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredAds.map((ad: Ad) => (
-                <AdCard key={ad.id} ad={ad} />
+              {featuredListings.map((listing: Listing) => (
+                <ListingCard key={listing.id} listing={listing} />
               ))}
             </div>
           ) : (
             <div className="text-center py-12 bg-secondary-800 rounded-lg shadow-xl">
               <p className="text-gray-300 text-lg mb-6">
-                No advertisements yet.
+                No listings available yet.
               </p>
               <Link
-                href={isAuthenticated ? "/ads/create" : "/login"}
+                href={isAuthenticated ? "/listings/create" : "/login"}
                 className="px-6 py-3 bg-primary-600 text-white rounded-lg font-bold hover:bg-primary-500 transition-colors shadow-lg"
               >
-                {isAuthenticated ? "Post the First Ad" : "Login to Post"}
+                {isAuthenticated ? "Post the First Listing" : "Login to Post"}
               </Link>
             </div>
           )}
@@ -130,13 +124,17 @@ export default function Home() {
       {/* How It Works Section */}
       <section className="py-16 bg-secondary-800">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-white">How It Works</h2>
+          <h2 className="text-3xl font-bold text-center mb-12 text-white">
+            How It Works
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center bg-secondary-700 p-8 rounded-lg shadow-lg">
               <div className="bg-primary-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-md">
                 1
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Create an Account</h3>
+              <h3 className="text-xl font-semibold mb-2 text-white">
+                Create an Account
+              </h3>
               <p className="text-gray-300">
                 Sign up for free and verify your email to get started.
               </p>
@@ -145,7 +143,9 @@ export default function Home() {
               <div className="bg-primary-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-md">
                 2
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Post Your Ad</h3>
+              <h3 className="text-xl font-semibold mb-2 text-white">
+                Post Your Listing
+              </h3>
               <p className="text-gray-300">
                 Add photos, description, set price and location.
               </p>
@@ -154,7 +154,9 @@ export default function Home() {
               <div className="bg-primary-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-md">
                 3
               </div>
-              <h3 className="text-xl font-semibold mb-2 text-white">Make a Deal</h3>
+              <h3 className="text-xl font-semibold mb-2 text-white">
+                Make a Deal
+              </h3>
               <p className="text-gray-300">
                 Respond to inquiries and complete your sale.
               </p>
@@ -171,10 +173,10 @@ export default function Home() {
             Join thousands of users who are buying and selling on our platform.
           </p>
           <Link
-            href={isAuthenticated ? "/ads/create" : "/register"}
+            href={isAuthenticated ? "/listings/create" : "/register"}
             className="px-8 py-4 bg-primary-600 text-white rounded-lg font-bold text-lg hover:bg-primary-500 transition-colors shadow-lg"
           >
-            {isAuthenticated ? "Post an Ad Now" : "Register for Free"}
+            {isAuthenticated ? "Post a Listing Now" : "Register for Free"}
           </Link>
         </div>
       </section>

@@ -1,12 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
-import { rootReducer } from "./rootReducer";
-import rootSaga from "./rootSaga";
+import authReducer from "./slices/authSlice";
+import listingsReducer from "./slices/listingsSlice";
+import categoriesReducer from "./slices/categoriesSlice";
+import locationsReducer from "./slices/locationsSlice";
+import rootSaga from "./sagas/rootSaga";
 
 const sagaMiddleware = createSagaMiddleware();
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: {
+    auth: authReducer,
+    listings: listingsReducer,
+    categories: categoriesReducer,
+    locations: locationsReducer,
+  },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
 });

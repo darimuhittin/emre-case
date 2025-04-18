@@ -1,47 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchAdsRequest,
-  setFilters,
-  clearFilters,
-} from "../../redux/slices/adsSlice";
+import { setFilters, clearFilters } from "../../redux/slices/adsSlice";
 import { RootState } from "../../redux/store";
-import AdCard from "./AdCard";
-import { Ad } from "../../types";
-
-// Mock data for filters
-const categories = [
-  "All",
-  "Electronics",
-  "Vehicles",
-  "Real Estate",
-  "Furniture",
-  "Clothing",
-  "Services",
-  "Jobs",
-  "Other",
-];
-
-const provinces = ["All", "Istanbul", "Ankara", "Izmir", "Antalya", "Bursa"];
-
-const AdsList: React.FC = () => {
+import ListingCard from "./ListingCard";
+import { Listing } from "../../types";
+import { fetchListingsRequest } from "../../redux/slices/listingsSlice";
+import ListPagination from "../../../components/shared/ListPagination";
+import { fetchCategoriesRequest } from "../../redux/sagas/categoriesSaga";
+import { fetchProvincesRequest } from "../../redux/sagas/locationsSaga";
+const ListingsList: React.FC = () => {
   const dispatch = useDispatch();
-  const { filteredAds, isLoading, error, filters } = useSelector(
-    (state: RootState) => state.ads
+  const {
+    listings,
+    isLoading,
+    error,
+    filters,
+    currentPage,
+    totalPages,
+    totalListings,
+  } = useSelector((state: RootState) => state.listings);
+
+  const categories = useSelector(
+    (state: RootState) => state.categories.categories
   );
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const adsPerPage = 9;
-
-  // Calculate pagination
-  const indexOfLastAd = currentPage * adsPerPage;
-  const indexOfFirstAd = indexOfLastAd - adsPerPage;
-  const currentAds = filteredAds.slice(indexOfFirstAd, indexOfLastAd);
-  const totalPages = Math.ceil(filteredAds.length / adsPerPage);
+  const provinces = useSelector(
+    (state: RootState) => state.locations.provinces
+  );
 
   // Fetch ads on component mount
   useEffect(() => {
-    dispatch(fetchAdsRequest());
+    dispatch(fetchListingsRequest({ page: 1 }));
+    dispatch(fetchCategoriesRequest());
+    dispatch(fetchProvincesRequest());
   }, [dispatch]);
 
   // Handle filter changes
@@ -65,65 +55,9 @@ const AdsList: React.FC = () => {
 
   // Handle pagination
   const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
+    dispatch(fetchListingsRequest({ page: pageNumber }));
     // Scroll to top when changing page
     window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  // Generate pagination controls
-  const paginationControls = () => {
-    const pages = [];
-
-    // Add previous button
-    pages.push(
-      <button
-        key="prev"
-        onClick={() => handlePageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-        className={`px-3 py-1 mx-1 rounded ${
-          currentPage === 1
-            ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-            : "bg-blue-600 text-white hover:bg-blue-700"
-        }`}
-      >
-        &lt;
-      </button>
-    );
-
-    // Add page numbers
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(
-        <button
-          key={i}
-          onClick={() => handlePageChange(i)}
-          className={`px-3 py-1 mx-1 rounded ${
-            currentPage === i
-              ? "bg-blue-600 text-white"
-              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-          }`}
-        >
-          {i}
-        </button>
-      );
-    }
-
-    // Add next button
-    pages.push(
-      <button
-        key="next"
-        onClick={() => handlePageChange(currentPage + 1)}
-        disabled={currentPage === totalPages || totalPages === 0}
-        className={`px-3 py-1 mx-1 rounded ${
-          currentPage === totalPages || totalPages === 0
-            ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-            : "bg-blue-600 text-white hover:bg-blue-700"
-        }`}
-      >
-        &gt;
-      </button>
-    );
-
-    return pages;
   };
 
   return (
@@ -143,13 +77,13 @@ const AdsList: React.FC = () => {
             <select
               id="category"
               name="category"
-              value={filters.category || "All"}
+              value={filters.categoryId || "All"}
               onChange={(e) => handleFilterChange(e, "category")}
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
+              {categories?.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
                 </option>
               ))}
             </select>
@@ -165,13 +99,13 @@ const AdsList: React.FC = () => {
             <select
               id="province"
               name="province"
-              value={filters.province || "All"}
+              value={filters.provinceId || "All"}
               onChange={(e) => handleFilterChange(e, "province")}
               className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {provinces.map((province) => (
-                <option key={province} value={province}>
-                  {province}
+              {provinces?.map((province) => (
+                <option key={province.id} value={province.id}>
+                  {province.name}
                 </option>
               ))}
             </select>
@@ -204,16 +138,15 @@ const AdsList: React.FC = () => {
         <>
           {/* Results count */}
           <p className="text-gray-600 mb-4">
-            {filteredAds.length}{" "}
-            {filteredAds.length === 1 ? "advertisement" : "advertisements"}{" "}
-            found
+            {totalListings}{" "}
+            {totalListings === 1 ? "advertisement" : "advertisements"} found
           </p>
 
           {/* Ads grid */}
-          {currentAds.length > 0 ? (
+          {listings.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              {currentAds.map((ad: Ad) => (
-                <AdCard key={ad.id} ad={ad} />
+              {listings.map((listing: Listing) => (
+                <ListingCard key={listing.id} listing={listing} />
               ))}
             </div>
           ) : (
@@ -224,15 +157,16 @@ const AdsList: React.FC = () => {
           )}
 
           {/* Pagination */}
-          {filteredAds.length > 0 && (
-            <div className="flex justify-center mt-8">
-              {paginationControls()}
-            </div>
-          )}
+          <ListPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            handlePageChange={handlePageChange}
+            itemsLength={listings.length}
+          />
         </>
       )}
     </div>
   );
 };
 
-export default AdsList;
+export default ListingsList;

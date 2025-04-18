@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { RootState } from "../redux/store";
 import { fetchAdsRequest } from "../redux/slices/adsSlice";
-import AdCard from "../components/ads/AdCard";
+import ListingCard from "../components/listings/ListingCard";
 import { Ad } from "../types";
 
 export default function MyAds() {
@@ -63,7 +63,7 @@ export default function MyAds() {
       ) : userAds.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {userAds.map((ad: Ad) => (
-            <AdCard key={ad.id} ad={ad} />
+            <ListingCard key={ad.id} ad={ad} />
           ))}
         </div>
       ) : (

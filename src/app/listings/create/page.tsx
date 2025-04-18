@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { RootState } from "../../redux/store";
-import AdForm from "../../components/ads/AdForm";
+import AdForm from "../../components/listings/AdForm";
 
 export default function CreateAd() {
   const router = useRouter();

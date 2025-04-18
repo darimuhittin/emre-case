@@ -1,91 +1,146 @@
-import { call, put, takeLatest, PutEffect } from "redux-saga/effects";
+import { takeLatest, put, call, all } from "redux-saga/effects";
+import { PayloadAction } from "@reduxjs/toolkit";
+import { AxiosError } from "axios";
+import apiClient from "../../services/apiClient";
+import { LoginCredentials, RegisterCredentials } from "../../types";
 import {
-  loginRequest,
   loginSuccess,
   loginFailure,
-  registerRequest,
   registerSuccess,
   registerFailure,
-  refreshTokenRequest,
-  refreshTokenSuccess,
-  refreshTokenFailure,
+  logoutSuccess,
+  logoutFailure,
+  fetchUserProfileSuccess,
+  fetchUserProfileFailure,
+  verifyEmailSuccess,
+  verifyEmailFailure,
+  setLoading,
 } from "../slices/authSlice";
-import { PayloadAction } from "@reduxjs/toolkit";
-import { LoginCredentials, RegisterCredentials } from "../../types";
-import api from "../../services/api";
 
-// Define common return types for sagas
-type SagaEffect = ReturnType<typeof call> | PutEffect<any>;
+// Create action types for saga
+export const LOGIN_REQUEST = "auth/loginRequest";
+export const REGISTER_REQUEST = "auth/registerRequest";
+export const LOGOUT_REQUEST = "auth/logoutRequest";
+export const FETCH_USER_PROFILE_REQUEST = "auth/fetchUserProfileRequest";
+export const VERIFY_EMAIL_REQUEST = "auth/verifyEmailRequest";
 
-// Login saga
-function* loginSaga(
-  action: PayloadAction<LoginCredentials>
-): Generator<SagaEffect, void, any> {
+// Create action creators for saga
+export const loginRequest = (credentials: LoginCredentials) => ({
+  type: LOGIN_REQUEST,
+  payload: credentials,
+});
+
+export const registerRequest = (userData: RegisterCredentials) => ({
+  type: REGISTER_REQUEST,
+  payload: userData,
+});
+
+export const logoutRequest = () => ({
+  type: LOGOUT_REQUEST,
+});
+
+export const fetchUserProfileRequest = () => ({
+  type: FETCH_USER_PROFILE_REQUEST,
+});
+
+export const verifyEmailRequest = (token: string) => ({
+  type: VERIFY_EMAIL_REQUEST,
+  payload: token,
+});
+
+// Worker Sagas
+function* loginWorker(action: PayloadAction<LoginCredentials>) {
   try {
-    const response = yield call(api.auth.login, action.payload);
-
-    // Save tokens to localStorage for persistence
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("refreshToken", response.data.refreshToken);
-
+    yield put(setLoading(true));
+    const response = yield call(apiClient.login, action.payload);
     yield put(loginSuccess(response.data));
-  } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Login failed";
-    yield put(loginFailure(errorMessage));
+
+    // Fetch user profile after successful login
+    yield put(fetchUserProfileRequest());
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    yield put(
+      loginFailure(axiosError.response?.data?.message || "Login failed")
+    );
   }
 }
 
-// Register saga
-function* registerSaga(
-  action: PayloadAction<RegisterCredentials>
-): Generator<SagaEffect, void, any> {
+function* registerWorker(action: PayloadAction<RegisterCredentials>) {
   try {
-    yield call(api.auth.register, action.payload);
+    yield put(setLoading(true));
+    yield call(apiClient.register, action.payload);
     yield put(registerSuccess());
 
-    // Auto-login after successful registration
+    // After registration, automatically log the user in
     yield put(
       loginRequest({
         email: action.payload.email,
         password: action.payload.password,
       })
     );
-  } catch (error: unknown) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Registration failed";
-    yield put(registerFailure(errorMessage));
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    yield put(
+      registerFailure(
+        axiosError.response?.data?.message || "Registration failed"
+      )
+    );
   }
 }
 
-// Refresh token saga
-function* refreshTokenSaga(): Generator<SagaEffect, void, any> {
+function* logoutWorker() {
   try {
-    const refreshToken = localStorage.getItem("refreshToken");
-
-    if (!refreshToken) {
-      throw new Error("No refresh token found");
-    }
-
-    const response = yield call(api.auth.refreshToken, refreshToken);
-
-    // Update tokens in localStorage
-    localStorage.setItem("token", response.data.token);
-    localStorage.setItem("refreshToken", response.data.refreshToken);
-
-    yield put(refreshTokenSuccess(response.data));
-  } catch (error: unknown) {
-    // Clear tokens on failure
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
-
-    yield put(refreshTokenFailure());
+    yield put(setLoading(true));
+    yield call(apiClient.logout);
+    yield put(logoutSuccess());
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    yield put(
+      logoutFailure(axiosError.response?.data?.message || "Logout failed")
+    );
   }
 }
 
-// Watch all auth sagas
-export function* watchAuthSagas() {
-  yield takeLatest(loginRequest.type, loginSaga);
-  yield takeLatest(registerRequest.type, registerSaga);
-  yield takeLatest(refreshTokenRequest.type, refreshTokenSaga);
+function* fetchUserProfileWorker() {
+  try {
+    yield put(setLoading(true));
+    const response = yield call(apiClient.getUserProfile);
+    yield put(fetchUserProfileSuccess(response.data));
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    yield put(
+      fetchUserProfileFailure(
+        axiosError.response?.data?.message || "Failed to fetch user profile"
+      )
+    );
+  }
+}
+
+function* verifyEmailWorker(action: PayloadAction<string>) {
+  try {
+    yield put(setLoading(true));
+    yield call(apiClient.verifyEmail, action.payload);
+    yield put(verifyEmailSuccess());
+
+    // Refresh user profile after email verification
+    yield put(fetchUserProfileRequest());
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    yield put(
+      verifyEmailFailure(
+        axiosError.response?.data?.message || "Email verification failed"
+      )
+    );
+  }
+}
+
+// Watcher Saga
+export function* authSaga() {
+  yield all([
+    takeLatest(LOGIN_REQUEST, loginWorker),
+    takeLatest(REGISTER_REQUEST, registerWorker),
+    takeLatest(LOGOUT_REQUEST, logoutWorker),
+    takeLatest(FETCH_USER_PROFILE_REQUEST, fetchUserProfileWorker),
+    takeLatest(VERIFY_EMAIL_REQUEST, verifyEmailWorker),
+  ]);
 }

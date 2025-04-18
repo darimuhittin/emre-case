@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Mail, Lock, KeyRound } from "lucide-react";
 import { RootState } from "../../redux/store";
-import { registerRequest } from "../../redux/slices/authSlice";
+import { registerRequest } from "../../redux/sagas/authSaga";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,16 +18,22 @@ import {
 import { Input } from "@/components/ui/input";
 
 // Define schema with Zod
-const registerSchema = z.object({
-  email: z.string().email("Invalid email address").min(1, "Email is required"),
-  password: z.string()
-    .min(6, "Password must be at least 6 characters")
-    .min(1, "Password is required"),
-  confirmPassword: z.string().min(1, "Confirm password is required"),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords must match",
-  path: ["confirmPassword"],
-});
+const registerSchema = z
+  .object({
+    email: z
+      .string()
+      .email("Invalid email address")
+      .min(1, "Email is required"),
+    password: z
+      .string()
+      .min(6, "Password must be at least 6 characters")
+      .min(1, "Password is required"),
+    confirmPassword: z.string().min(1, "Confirm password is required"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
@@ -85,7 +91,11 @@ const RegisterForm: React.FC = () => {
                   <Lock className="h-4 w-4" /> Password
                 </FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Enter your password" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="Enter your password"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -101,18 +111,18 @@ const RegisterForm: React.FC = () => {
                   <KeyRound className="h-4 w-4" /> Confirm Password
                 </FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Confirm your password" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="Confirm your password"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-full"
-          >
+          <Button type="submit" disabled={isLoading} className="w-full">
             {isLoading ? "Registering..." : "Register"}
           </Button>
         </form>

@@ -1,42 +1,87 @@
 export interface User {
   id: string;
   email: string;
-  token: string;
-  refreshToken: string;
+  name?: string;
+  isEmailVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export interface Ad {
+export interface Listing {
   id: string;
   title: string;
   description: string;
-  category: string;
-  province: string;
-  district: string;
   price: number;
   images: string[];
+  user: User;
+  category: Category;
+  district: District;
   createdAt: string;
   updatedAt: string;
-  userId: string;
+  slug: string;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  listingsCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Province {
+  id: string;
+  name: string;
+  districts: District[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface District {
+  id: string;
+  name: string;
+  province: Province;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface AuthState {
   user: User | null;
+  accessToken: string | null;
+  refreshToken: string | null;
   isLoading: boolean;
   error: string | null;
   isAuthenticated: boolean;
 }
 
-export interface AdsState {
-  ads: Ad[];
-  filteredAds: Ad[];
-  selectedAd: Ad | null;
+export interface ListingsState {
+  listings: Listing[];
+  totalListings: number;
+  currentPage: number;
+  totalPages: number;
+  pageSize: number;
+  selectedListing: Listing | null;
+  selectedListingLoading: boolean;
   isLoading: boolean;
   error: string | null;
   filters: {
-    category: string;
-    province: string;
-    district: string;
+    categoryId?: string;
+    provinceId?: string;
+    districtId?: string;
+    search?: string;
   };
+}
+
+export interface CategoriesState {
+  categories: Category[];
+  isLoading: boolean;
+  error: string | null;
+}
+
+export interface LocationsState {
+  provinces: Province[];
+  isLoading: boolean;
+  error: string | null;
 }
 
 export interface LoginCredentials {
@@ -47,15 +92,27 @@ export interface LoginCredentials {
 export interface RegisterCredentials {
   email: string;
   password: string;
-  confirmPassword: string;
+  name?: string;
 }
 
-export interface AdFormData {
+export interface ListingFormData {
   title: string;
   description: string;
-  category: string;
-  province: string;
-  district: string;
   price: number;
+  categoryId: string;
+  districtId: string;
   images: File[];
+}
+
+export interface CategoryFormData {
+  name: string;
+}
+
+export interface ProvinceFormData {
+  name: string;
+}
+
+export interface DistrictFormData {
+  name: string;
+  provinceId: string;
 }

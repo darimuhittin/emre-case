@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Mail, Lock } from "lucide-react";
 import { RootState } from "../../redux/store";
-import { loginRequest } from "../../redux/slices/authSlice";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,11 +15,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { loginRequest } from "../../redux/sagas/authSaga";
 
 // Define schema with Zod
 const loginSchema = z.object({
   email: z.string().email("Invalid email address").min(1, "Email is required"),
-  password: z.string()
+  password: z
+    .string()
     .min(6, "Password must be at least 6 characters")
     .min(1, "Password is required"),
 });
@@ -80,18 +81,18 @@ const LoginForm: React.FC = () => {
                   <Lock className="h-4 w-4" /> Password
                 </FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="Enter your password" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="Enter your password"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-full"
-          >
+          <Button type="submit" disabled={isLoading} className="w-full">
             {isLoading ? "Logging in..." : "Login"}
           </Button>
         </form>

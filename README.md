@@ -1,92 +1,80 @@
-# AdPlatform - Classified Ads Website
+# Marketplace Frontend
 
-AdPlatform is a modern web application built with Next.js that allows users to create, browse, and manage classified advertisements. This project showcases the implementation of a responsive UI using Tailwind CSS, state management with Redux and Redux-Saga, and form handling with Formik.
+A modern marketplace application for listings, developed with Next.js and Redux Saga.
 
 ## Features
 
-- **User Authentication**: Register and login functionality
-- **Browse Advertisements**: View all ads with filtering by category and location
-- **Create & Manage Ads**: Post new ads and manage your existing ads
-- **Responsive Design**: Works on both desktop and mobile devices
-- **Mock Backend**: Includes a local mock API service that simulates backend functionality
+- User authentication (login, register, email verification)
+- Listings management (create, update, delete, browse)
+- Categories management
+- Locations (provinces and districts) management
+- Image upload for listings
+- Search and filtering capabilities
 
 ## Tech Stack
 
-- **Frontend Framework**: Next.js
-- **Styling**: Tailwind CSS
-- **State Management**: Redux, Redux Toolkit, Redux-Saga
-- **Form Handling**: Formik with Yup validation
-- **Mock API**: Custom implementation with localStorage for persistence
+- Next.js 14+ (React framework)
+- TypeScript
+- Redux Toolkit for state management
+- Redux Saga for side effects
+- Axios for API requests
+- Tailwind CSS for styling
+
+## Backend API
+
+This frontend connects to a NestJS backend API running on `http://localhost:8000` with the following endpoints:
+
+- **Authentication**: `/auth/*` - Register, login, verify email, refresh token, logout
+- **User Profile**: `/users/profile` - Get user profile information
+- **Listings**: `/listings/*` - CRUD operations for listings, image upload
+- **Categories**: `/categories/*` - CRUD operations for categories
+- **Locations**: `/locations/*` - CRUD operations for provinces and districts
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js (v14 or later)
-- npm or yarn
-
-### Installation
-
-1. Clone the repository:
-
-   ```
-   git clone <repository-url>
-   cd adplatform
-   ```
-
+1. Clone the repository
 2. Install dependencies:
-
-   ```
+   ```bash
    npm install
    ```
-
-3. Start the development server:
-
-   ```
+3. Ensure that the backend API is running at `http://localhost:8000`
+4. Start the development server:
+   ```bash
    npm run dev
    ```
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+## State Management
+
+The application uses Redux Toolkit with Redux Saga for state management:
+
+- **Auth**: Manages user authentication state
+- **Listings**: Manages listings data and operations
+- **Categories**: Manages categories data and operations
+- **Locations**: Manages provinces and districts data and operations
 
 ## Project Structure
 
-- `/src/app`: Next.js application code
-  - `/components`: Reusable UI components
-  - `/redux`: Redux store, slices, and sagas
-  - `/services`: Mock API service
-  - `/types`: TypeScript type definitions
-  - `/[page-name]`: Next.js page components
+```
+src/
+├── app/                  # Main application code
+│   ├── components/       # Reusable UI components
+│   ├── redux/            # Redux state management
+│   │   ├── slices/       # Redux slices for each feature
+│   │   ├── sagas/        # Redux Sagas for async operations
+│   │   └── store.ts      # Redux store configuration
+│   ├── services/         # API services
+│   ├── types/            # TypeScript type definitions
+│   └── utils/            # Utility functions
+```
 
-## Usage
+## Development
 
-### Authentication
-
-- You can register a new account or use the demo account:
-  - Email: test@example.com
-  - No password required for the demo account in the mock implementation
-
-### Creating Ads
-
-1. Log in to your account
-2. Click on "Post an Ad" in the navigation
-3. Fill out the form with the details of your item
-4. Submit the form to create your ad
-
-### Browsing Ads
-
-- View all ads on the home page or browse page
-- Use filters to narrow down ads by category or location
-
-### Managing Your Ads
-
-1. Log in to your account
-2. Go to "My Ads" in the user menu
-3. Edit or delete your existing ads
-
-## Mock Implementation
-
-This project uses a mock API implementation that stores data in the browser's localStorage. This approach allows the application to function without a real backend server. In a production environment, you would connect to a real API instead.
+- Run in development mode: `npm run dev`
+- Build for production: `npm run build`
+- Start production server: `npm start`
+- Run linting: `npm run lint`
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE).
+MIT
