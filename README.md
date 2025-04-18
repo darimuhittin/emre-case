@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AdPlatform - Classified Ads Website
+
+AdPlatform is a modern web application built with Next.js that allows users to create, browse, and manage classified advertisements. This project showcases the implementation of a responsive UI using Tailwind CSS, state management with Redux and Redux-Saga, and form handling with Formik.
+
+## Features
+
+- **User Authentication**: Register and login functionality
+- **Browse Advertisements**: View all ads with filtering by category and location
+- **Create & Manage Ads**: Post new ads and manage your existing ads
+- **Responsive Design**: Works on both desktop and mobile devices
+- **Mock Backend**: Includes a local mock API service that simulates backend functionality
+
+## Tech Stack
+
+- **Frontend Framework**: Next.js
+- **Styling**: Tailwind CSS
+- **State Management**: Redux, Redux Toolkit, Redux-Saga
+- **Form Handling**: Formik with Yup validation
+- **Mock API**: Custom implementation with localStorage for persistence
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js (v14 or later)
+- npm or yarn
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```
+   git clone <repository-url>
+   cd adplatform
+   ```
 
-## Learn More
+2. Install dependencies:
 
-To learn more about Next.js, take a look at the following resources:
+   ```
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Start the development server:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```
+   npm run dev
+   ```
 
-## Deploy on Vercel
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `/src/app`: Next.js application code
+  - `/components`: Reusable UI components
+  - `/redux`: Redux store, slices, and sagas
+  - `/services`: Mock API service
+  - `/types`: TypeScript type definitions
+  - `/[page-name]`: Next.js page components
+
+## Usage
+
+### Authentication
+
+- You can register a new account or use the demo account:
+  - Email: test@example.com
+  - No password required for the demo account in the mock implementation
+
+### Creating Ads
+
+1. Log in to your account
+2. Click on "Post an Ad" in the navigation
+3. Fill out the form with the details of your item
+4. Submit the form to create your ad
+
+### Browsing Ads
+
+- View all ads on the home page or browse page
+- Use filters to narrow down ads by category or location
+
+### Managing Your Ads
+
+1. Log in to your account
+2. Go to "My Ads" in the user menu
+3. Edit or delete your existing ads
+
+## Mock Implementation
+
+This project uses a mock API implementation that stores data in the browser's localStorage. This approach allows the application to function without a real backend server. In a production environment, you would connect to a real API instead.
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
