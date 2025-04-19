@@ -16,6 +16,7 @@ import {
   verifyEmailFailure,
   setLoading,
 } from "../slices/authSlice";
+import { navigate } from "../../services/navigationService";
 // Create action types for saga
 export const LOGIN_REQUEST = "auth/loginRequest";
 export const REGISTER_REQUEST = "auth/registerRequest";
@@ -54,6 +55,7 @@ function* loginWorker(action: PayloadAction<LoginCredentials>) {
     const response = yield call(apiClient.login, action.payload);
     console.log("HERE RESPONSE LOGIN: ", response);
     yield put(loginSuccess(response));
+    navigate("/");
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;
     console.log("HERE ERROR LOGIN: ", axiosError);

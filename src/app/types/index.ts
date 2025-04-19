@@ -50,8 +50,10 @@ export interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
   isLoading: boolean;
-  error: string | null;
   isAuthenticated: boolean;
+  loginError: string | null;
+  registerError: string | null;
+  error: string | null;
 }
 
 export interface ListingsState {
@@ -77,6 +79,10 @@ export interface ListingsState {
   updateListingError: string | null;
   deleteListingLoading: boolean;
   deleteListingError: string | null;
+
+  fetchMyListingsLoading: boolean;
+  fetchMyListingsError: string | null;
+  myListings: Listing[];
 }
 
 export interface CategoriesState {

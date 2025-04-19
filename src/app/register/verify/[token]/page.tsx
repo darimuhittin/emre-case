@@ -29,9 +29,9 @@ export default function VerifyEmail() {
     if (isLoading) {
       return (
         <div className="flex flex-col items-center justify-center">
-          <Loader2 className="h-16 w-16 text-blue-600 animate-spin mb-4" />
+          <Loader2 className="h-16 w-16 text-blue-400 animate-spin mb-4" />
           <h2 className="text-2xl font-bold mb-2">Verifying your email</h2>
-          <p className="text-gray-600">
+          <p className="text-gray-300">
             Please wait while we verify your email address...
           </p>
         </div>
@@ -41,23 +41,23 @@ export default function VerifyEmail() {
     if (error) {
       return (
         <div className="flex flex-col items-center justify-center">
-          <AlertTriangle className="h-16 w-16 text-red-600 mb-4" />
+          <AlertTriangle className="h-16 w-16 text-red-400 mb-4" />
           <h2 className="text-2xl font-bold mb-2">Verification Failed</h2>
-          <p className="text-red-600 mb-4">{error}</p>
-          <p className="text-gray-600 mb-6">
+          <p className="text-red-400 mb-4">{error}</p>
+          <p className="text-gray-300 mb-6">
             The verification link may have expired or is invalid. Please try
             registering again or contact support.
           </p>
           <div className="flex gap-4">
             <Link
               href="/register"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+              className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition"
             >
               Register Again
             </Link>
             <Link
               href="/login"
-              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition"
+              className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition"
             >
               Login
             </Link>
@@ -69,9 +69,9 @@ export default function VerifyEmail() {
     if (verified) {
       return (
         <div className="flex flex-col items-center justify-center">
-          <Check className="h-16 w-16 text-green-600 mb-4" />
+          <Check className="h-16 w-16 text-green-400 mb-4" />
           <h2 className="text-2xl font-bold mb-2">Email Verified!</h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-300 mb-6">
             Your email has been successfully verified. You can now log in to
             your account.
           </p>
@@ -89,8 +89,8 @@ export default function VerifyEmail() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-16">
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4 py-16">
+      <div className="max-w-md w-full bg-gray-800 rounded-lg shadow-lg p-8 text-white">
         <h1 className="text-3xl font-bold text-center mb-8">
           Email Verification
         </h1>

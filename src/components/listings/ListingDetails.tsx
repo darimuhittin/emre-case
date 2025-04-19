@@ -125,31 +125,75 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
       <div className="mx-auto">
         {/* Breadcrumb */}
-        <div className="mb-6 bg-white/10 p-3 rounded-lg backdrop-blur-sm">
-          <Link href="/" className="text-blue-400 hover:text-blue-300">
+        <div className="mb-6 bg-neutral-800/80 p-3 rounded-lg backdrop-blur-sm flex items-center text-sm">
+          <Link
+            href="/"
+            className="text-blue-400 hover:text-blue-300 transition-colors"
+          >
             Home
           </Link>
-          {" > "}
-          <Link href="/ads" className="text-blue-400 hover:text-blue-300">
+          <svg
+            className="h-4 w-4 mx-2 text-gray-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+          <Link
+            href="/ads"
+            className="text-blue-400 hover:text-blue-300 transition-colors"
+          >
             Ads
           </Link>
-          {" > "}
+          <svg
+            className="h-4 w-4 mx-2 text-gray-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
           <Link
             href={`/ads?category=${selectedListing.category}`}
-            className="text-blue-400 hover:text-blue-300"
+            className="text-blue-400 hover:text-blue-300 transition-colors"
           >
             {selectedListing.category.name}
           </Link>
-          {" > "}
-          <span className="text-gray-300">{selectedListing.title}</span>
+          <svg
+            className="h-4 w-4 mx-2 text-gray-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+          <span className="text-gray-300 truncate">
+            {selectedListing.title}
+          </span>
         </div>
 
-        <div className="bg-neutral-800 rounded-lg shadow-xl overflow-hidden border border-neutral-700">
+        <div className="bg-neutral-900 rounded-xl shadow-2xl overflow-hidden border border-neutral-800">
           {/* Image carousel */}
-          <div className="relative bg-neutral-900">
+          <div className="relative bg-neutral-950">
             {selectedListing.images && selectedListing.images.length > 0 ? (
               <Carousel setApi={setCarouselApi} className="w-full">
                 <CarouselContent>
@@ -159,21 +203,24 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
                         <div className="h-[500px] flex items-center justify-center">
                           <Image
                             src={image}
-                            alt={`${selectedListing.title} - Image ${index + 1}`}
+                            alt={`${selectedListing.title} - Image ${
+                              index + 1
+                            }`}
                             width={1000}
                             height={1000}
                             className="object-contain w-full h-full"
+                            priority={index === 0}
                           />
                         </div>
                       </CarouselItem>
                     )
                   )}
                 </CarouselContent>
-                <CarouselPrevious className="left-4 bg-neutral-800/70 hover:bg-neutral-700 border-neutral-600" />
-                <CarouselNext className="right-4 bg-neutral-800/70 hover:bg-neutral-700 border-neutral-600" />
+                <CarouselPrevious className="left-4 bg-black/50 backdrop-blur-sm hover:bg-black/80 border-neutral-700 transition-all" />
+                <CarouselNext className="right-4 bg-black/50 backdrop-blur-sm hover:bg-black/80 border-neutral-700 transition-all" />
               </Carousel>
             ) : (
-              <div className="w-full h-96 flex items-center justify-center bg-neutral-800">
+              <div className="w-full h-96 flex items-center justify-center bg-neutral-900">
                 <span className="text-gray-400">No image available</span>
               </div>
             )}
@@ -181,7 +228,7 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
 
           {/* Thumbnails */}
           {selectedListing.images && selectedListing.images.length > 1 && (
-            <div className="py-3 px-4 bg-neutral-900 flex space-x-2 overflow-x-auto">
+            <div className="py-3 px-4 bg-neutral-950 flex space-x-2 overflow-x-auto">
               {selectedListing.images.map((image: string, index: number) => (
                 <Button
                   variant="ghost"
@@ -189,10 +236,11 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
                   onClick={() => {
                     carouselApi?.scrollTo(index);
                   }}
-                  className={`flex-shrink-0 w-16 h-16 p-0 rounded overflow-hidden border-2 ${slideInView === index
-                    ? "border-blue-500"
-                    : "border-transparent opacity-50"
-                    }`}
+                  className={`flex-shrink-0 w-16 h-16 p-0 rounded-md overflow-hidden border-2 transition-all ${
+                    slideInView === index
+                      ? "border-blue-500 shadow-md shadow-blue-500/20"
+                      : "border-transparent opacity-50 hover:opacity-80"
+                  }`}
                 >
                   <Image
                     src={image}
@@ -206,55 +254,55 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
             </div>
           )}
 
-          <div className="p-6">
+          <div className="p-8">
             {/* Title and price */}
-            <div className="flex flex-col md:flex-row justify-between md:items-center mb-6">
-              <h1 className="text-3xl font-bold text-white mb-2 md:mb-0">
+            <div className="flex flex-col md:flex-row justify-between md:items-center mb-8">
+              <h1 className="text-3xl font-bold text-white mb-4 md:mb-0 leading-tight">
                 {selectedListing.title}
               </h1>
-              <div className="text-2xl font-bold text-blue-400 bg-blue-900/30 px-4 py-2 rounded-lg">
+              <div className="text-2xl font-bold text-white bg-gradient-to-r from-blue-600 to-blue-500 px-6 py-3 rounded-lg shadow-lg shadow-blue-600/20">
                 {formatPrice(selectedListing.price)}
               </div>
             </div>
 
             {/* Meta information */}
-            <div className="flex flex-wrap gap-2 mb-8">
-              <span className="px-3 py-1 rounded-full text-sm bg-blue-900/50 text-blue-300 border border-blue-700">
+            <div className="flex flex-wrap gap-3 mb-8">
+              <span className="px-4 py-1.5 rounded-full text-sm font-medium bg-blue-950 text-blue-300 border border-blue-800 shadow-sm">
                 {selectedListing.category.name}
               </span>
-              <span className="px-3 py-1 rounded-full text-sm bg-green-900/50 text-green-300 border border-green-700">
+              <span className="px-4 py-1.5 rounded-full text-sm font-medium bg-emerald-950 text-emerald-300 border border-emerald-800 shadow-sm">
                 {selectedListing.district.province.name}
               </span>
-              <span className="px-3 py-1 rounded-full text-sm bg-purple-900/50 text-purple-300 border border-purple-700">
+              <span className="px-4 py-1.5 rounded-full text-sm font-medium bg-violet-950 text-violet-300 border border-violet-800 shadow-sm">
                 {selectedListing.district.name}
               </span>
-              <span className="px-3 py-1 rounded-full text-sm bg-neutral-800 text-gray-300 border border-neutral-700">
+              <span className="px-4 py-1.5 rounded-full text-sm font-medium bg-neutral-900 text-gray-300 border border-neutral-800 shadow-sm">
                 Posted: {formatDate(selectedListing.createdAt)}
               </span>
             </div>
 
             {/* Description */}
-            <div className="mb-8 bg-neutral-900/50 p-4 rounded-lg border border-neutral-800">
-              <h2 className="text-xl font-semibold text-gray-100 mb-3">
+            <div className="mb-8 bg-neutral-950 p-6 rounded-xl border border-neutral-800 shadow-inner">
+              <h2 className="text-xl font-semibold text-gray-100 mb-4">
                 Description
               </h2>
-              <p className="text-gray-300 whitespace-pre-line">
+              <p className="text-gray-300 whitespace-pre-line leading-relaxed">
                 {selectedListing.description}
               </p>
             </div>
 
             {/* Owner actions */}
             {isOwner && (
-              <div className="flex flex-col sm:flex-row gap-3 mt-8 pt-6 border-t border-neutral-700">
+              <div className="flex flex-col sm:flex-row gap-4 mt-8 pt-6 border-t border-neutral-800">
                 <Link
                   href={`/ads/edit/${selectedListing.id}`}
-                  className="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-center font-medium transition-colors"
+                  className="flex-1 px-6 py-3.5 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white rounded-lg text-center font-medium transition-all shadow-lg shadow-blue-600/20"
                 >
                   Edit Advertisement
                 </Link>
                 <button
                   onClick={handleDeleteAd}
-                  className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-md font-medium transition-colors"
+                  className="flex-1 px-6 py-3.5 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-600 text-white rounded-lg font-medium transition-all shadow-lg shadow-red-600/20"
                 >
                   Delete Advertisement
                 </button>
@@ -263,8 +311,22 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
 
             {/* Contact button (for non-owners) */}
             {!isOwner && isAuthenticated && (
-              <div className="mt-8 pt-6 border-t border-neutral-700">
-                <button className="w-full sm:w-auto px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-md font-medium transition-colors">
+              <div className="mt-8 pt-6 border-t border-neutral-800">
+                <button className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white rounded-lg font-medium transition-all shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                    />
+                  </svg>
                   Contact Seller
                 </button>
               </div>
@@ -272,12 +334,27 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
 
             {/* Login prompt for unauthenticated users */}
             {!isAuthenticated && (
-              <div className="mt-8 pt-6 border-t border-neutral-700">
-                <p className="mb-4 text-gray-300">
+              <div className="mt-8 pt-6 border-t border-neutral-800 bg-neutral-950 p-6 rounded-xl">
+                <p className="mb-5 text-gray-300 flex items-center gap-2">
+                  <svg
+                    className="w-5 h-5 text-yellow-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
                   You need to be logged in to contact the seller.
                 </p>
                 <Link href="/login">
-                  <Button variant="default" className="bg-blue-600 hover:bg-blue-700 transition-colors">
+                  <Button
+                    variant="default"
+                    className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-600 transition-all shadow-lg shadow-blue-600/20 px-6 py-2.5"
+                  >
                     Login to Contact
                   </Button>
                 </Link>

@@ -24,6 +24,10 @@ import {
   deleteListingImageRequest,
   deleteListingImageSuccess,
   deleteListingImageFailure,
+  // My Listings
+  fetchMyListingsRequest,
+  fetchMyListingsSuccess,
+  fetchMyListingsFailure,
 } from "../slices/listingsSlice";
 import { navigate } from "../../services/navigationService";
 import { ListingFormData } from "../../types";
@@ -49,6 +53,7 @@ function* fetchListingsWorker(
     provinceId?: string;
     districtId?: string;
     search?: string;
+    userId?: string;
   }>
 ) {
   try {
@@ -212,6 +217,21 @@ function* deleteListingImageWorker(
   }
 }
 
+function* fetchMyListingsWorker() {
+  try {
+    const response = yield call(apiClient.getMyListings);
+    console.log(response);
+    yield put(fetchMyListingsSuccess(response.items));
+  } catch (error) {
+    const axiosError = error as AxiosError<{ message: string }>;
+    yield put(
+      fetchMyListingsFailure(
+        axiosError.response?.data?.message || "Failed to fetch my listings"
+      )
+    );
+  }
+}
+
 // Watchers
 export function* listingsSaga() {
   yield all([
@@ -222,5 +242,6 @@ export function* listingsSaga() {
     takeLatest(DELETE_LISTING_REQUEST, deleteListingWorker),
     takeLatest(uploadListingImageRequest.type, uploadListingImageWorker),
     takeLatest(deleteListingImageRequest.type, deleteListingImageWorker),
+    takeLatest(fetchMyListingsRequest.type, fetchMyListingsWorker),
   ]);
 }

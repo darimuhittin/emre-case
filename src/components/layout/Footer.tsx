@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -11,7 +12,7 @@ const Footer: React.FC = () => {
           {/* Logo and description */}
           <div className="col-span-1 md:col-span-2">
             <Link href="/" className="text-2xl font-bold text-primary-500">
-              AdPlatform
+              <Image src="/logo.png" alt="logo" width={118} height={20} />
             </Link>
             <p className="mt-3 text-gray-400">
               An advertisement platform where users can post, manage, and browse
@@ -27,12 +28,18 @@ const Footer: React.FC = () => {
             </h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="text-gray-400 hover:text-primary-400 transition-colors">
+                <Link
+                  href="/"
+                  className="text-gray-400 hover:text-primary-400 transition-colors"
+                >
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/ads" className="text-gray-400 hover:text-primary-400 transition-colors">
+                <Link
+                  href="/ads"
+                  className="text-gray-400 hover:text-primary-400 transition-colors"
+                >
                   Browse Ads
                 </Link>
               </li>
@@ -45,7 +52,10 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/my-ads" className="text-gray-400 hover:text-primary-400 transition-colors">
+                <Link
+                  href="/my-ads"
+                  className="text-gray-400 hover:text-primary-400 transition-colors"
+                >
                   My Ads
                 </Link>
               </li>
@@ -59,7 +69,10 @@ const Footer: React.FC = () => {
             </h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/login" className="text-gray-400 hover:text-primary-400 transition-colors">
+                <Link
+                  href="/login"
+                  className="text-gray-400 hover:text-primary-400 transition-colors"
+                >
                   Login
                 </Link>
               </li>
@@ -91,7 +104,10 @@ const Footer: React.FC = () => {
             </p>
             <div className="mt-4 md:mt-0">
               <div className="flex space-x-4">
-                <a href="#" className="text-gray-400 hover:text-primary-400 transition-colors">
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-primary-400 transition-colors"
+                >
                   <span className="sr-only">Facebook</span>
                   <svg
                     className="h-6 w-6"
@@ -106,7 +122,10 @@ const Footer: React.FC = () => {
                     />
                   </svg>
                 </a>
-                <a href="#" className="text-gray-400 hover:text-primary-400 transition-colors">
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-primary-400 transition-colors"
+                >
                   <span className="sr-only">Twitter</span>
                   <svg
                     className="h-6 w-6"
@@ -117,7 +136,10 @@ const Footer: React.FC = () => {
                     <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
                   </svg>
                 </a>
-                <a href="#" className="text-gray-400 hover:text-primary-400 transition-colors">
+                <a
+                  href="#"
+                  className="text-gray-400 hover:text-primary-400 transition-colors"
+                >
                   <span className="sr-only">Instagram</span>
                   <svg
                     className="h-6 w-6"

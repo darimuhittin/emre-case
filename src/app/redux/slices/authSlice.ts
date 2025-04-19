@@ -7,8 +7,10 @@ const initialState: AuthState = {
   accessToken: null,
   refreshToken: null,
   isLoading: true,
-  error: null,
+  loginError: null,
+  registerError: null,
   isAuthenticated: false,
+  error: null,
 };
 
 // Auth slice
@@ -22,7 +24,8 @@ const authSlice = createSlice({
     },
     // Clear error
     clearError: (state) => {
-      state.error = null;
+      state.loginError = null;
+      state.registerError = null;
     },
     // Initialize authentication state from localStorage
     initAuth: (state) => {
@@ -44,26 +47,26 @@ const authSlice = createSlice({
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
       state.isAuthenticated = true;
-      state.error = null;
+      state.loginError = null;
       toast.success("Login successful");
     },
     // Login failure
     loginFailure: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
-      state.error = action.payload;
+      state.loginError = action.payload;
       state.isAuthenticated = false;
       toast.error("Login failed");
     },
     // Register success
     registerSuccess: (state) => {
       state.isLoading = false;
-      state.error = null;
+      state.registerError = null;
       toast.success("Register successful");
     },
     // Register failure
     registerFailure: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
-      state.error = action.payload;
+      state.registerError = action.payload;
       toast.error("Register failed");
     },
     // Logout success

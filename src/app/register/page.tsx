@@ -19,16 +19,19 @@ export default function Register() {
   }, [isAuthenticated, router]);
 
   return (
-    <div className="container mx-auto px-4 py-16">
-      <div className="max-w-md mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4 py-12">
+      <div className="w-full max-w-md">
+        <h1 className="text-3xl font-bold text-center text-white mb-6">
           Create an Account
         </h1>
         <RegisterForm />
         <div className="mt-6 text-center">
-          <p className="text-gray-600">
+          <p className="text-gray-400">
             Already have an account?{" "}
-            <Link href="/login" className="text-blue-600 hover:underline">
+            <Link
+              href="/login"
+              className="text-blue-400 hover:text-blue-300 transition-colors"
+            >
               Login here
             </Link>
           </p>

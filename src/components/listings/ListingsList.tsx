@@ -48,14 +48,18 @@ const ListingsList: React.FC = () => {
     dispatch(fetchProvincesRequest());
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(fetchListingsRequest(filters));
-  }, [JSON.stringify(filters)]);
-
   // Handle clear filters
   const handleClearFilters = () => {
-    dispatch(clearFilters());
+    if (filters.search || filters.categoryId || filters.provinceId) {
+      dispatch(clearFilters());
+    }
   };
+
+  useEffect(() => {
+    if (!filters.search && !filters.categoryId && !filters.provinceId) {
+      dispatch(fetchListingsRequest({ page: 1 }));
+    }
+  }, [filters.search, filters.categoryId, filters.provinceId, dispatch]);
 
   // Handle pagination
   const handlePageChange = (pageNumber: number) => {
@@ -66,7 +70,9 @@ const ListingsList: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-6">Browse Advertisements</h2>
+      <h2 className="text-2xl font-bold mb-6 text-white">
+        Browse Advertisements
+      </h2>
 
       {/* Filters */}
       <div className="p-4 rounded-lg shadow-md mb-6 bg-gray-800/60 border border-gray-700">
@@ -79,9 +85,8 @@ const ListingsList: React.FC = () => {
               placeholder="Search listings..."
               value={filters.search || ""}
               onChange={(e) => {
-                dispatch(setFilters({ search: e.target.value }))
-              }
-              }
+                dispatch(setFilters({ search: e.target.value }));
+              }}
               className="w-full"
             />
           </div>
@@ -129,13 +134,27 @@ const ListingsList: React.FC = () => {
             </Select>
           </div>
 
-
-
           <div className="flex-0 self-end">
-            <Button onClick={handleClearFilters} variant="outline">
-              Clear Filters
+            <Button
+              onClick={() => dispatch(fetchListingsRequest(filters))}
+              className="ml-2"
+            >
+              Apply Filters
             </Button>
           </div>
+
+          {(filters.search || filters.categoryId || filters.provinceId) && (
+            <div className="flex-0 self-end">
+              <Button onClick={handleClearFilters} variant="outline">
+                Clear Filters (
+                {
+                  Object.values(filters).filter((value) => value.length > 0)
+                    .length
+                }
+                )
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -150,7 +169,10 @@ const ListingsList: React.FC = () => {
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {[...Array(12)].map((_, index) => (
-            <div key={index} className="bg-gray-800/60 border border-gray-700 rounded-lg overflow-hidden">
+            <div
+              key={index}
+              className="bg-gray-800/60 border border-gray-700 rounded-lg overflow-hidden"
+            >
               {/* Skeleton image */}
               <Skeleton className="w-full h-48" />
               {/* Skeleton content */}

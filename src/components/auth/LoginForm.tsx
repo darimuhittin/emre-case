@@ -30,7 +30,9 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const LoginForm: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoading, error } = useSelector((state: RootState) => state.auth);
+  const { isLoading, loginError } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   // Initialize form with validation
   const form = useForm<LoginFormValues>({
@@ -48,27 +50,31 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
-
-      {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
+    <div className="w-full">
+      {loginError && (
+        <div className="mb-6 p-3 bg-red-900/40 text-red-300 border border-red-700 rounded-md">
+          {loginError}
+        </div>
       )}
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" /> Email
+              <FormItem className="space-y-2">
+                <FormLabel className="flex items-center gap-2 text-gray-300">
+                  <Mail className="h-4 w-4 text-gray-400" /> Email
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your email" {...field} />
+                  <Input
+                    placeholder="Enter your email"
+                    {...field}
+                    className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:ring-blue-500 focus:border-blue-500"
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-400" />
               </FormItem>
             )}
           />
@@ -77,24 +83,29 @@ const LoginForm: React.FC = () => {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel className="flex items-center gap-2">
-                  <Lock className="h-4 w-4" /> Password
+              <FormItem className="space-y-2">
+                <FormLabel className="flex items-center gap-2 text-gray-300">
+                  <Lock className="h-4 w-4 text-gray-400" /> Password
                 </FormLabel>
                 <FormControl>
                   <Input
                     type="password"
                     placeholder="Enter your password"
                     {...field}
+                    className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-400" />
               </FormItem>
             )}
           />
 
-          <Button type="submit" disabled={isLoading} className="w-full">
-            {isLoading ? "Logging in..." : "Login"}
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="w-full mt-6 bg-primary hover:bg-primary/80 text-white py-2 rounded-md transition-colors"
+          >
+            {isLoading ? "Logging in..." : "Sign In"}
           </Button>
         </form>
       </Form>

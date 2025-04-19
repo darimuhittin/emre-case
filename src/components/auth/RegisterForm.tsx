@@ -16,7 +16,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
 // Define schema with Zod
 const registerSchema = z
   .object({
@@ -39,18 +38,19 @@ const registerSchema = z
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 const RegisterForm: React.FC = () => {
-  const router = useRouter();
   const dispatch = useDispatch();
-  const { isLoading, error } = useSelector((state: RootState) => state.auth);
+  const { isLoading, registerError } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   // Initialize form with validation
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      email: "darimuhittin@gmail.com",
-      password: "123456",
-      confirmPassword: "123456",
-      name: "Dari Muhittin",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      name: "",
     },
   });
 
@@ -64,11 +64,15 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
+    <div className="w-full p-6 bg-gray-800 rounded-lg shadow-xl border border-gray-700">
+      <h2 className="text-2xl font-bold text-center text-white mb-6">
+        Register
+      </h2>
 
-      {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
+      {registerError && (
+        <div className="mb-4 p-3 bg-red-900/50 text-red-200 rounded border border-red-700 text-sm">
+          {registerError}
+        </div>
       )}
 
       <Form {...form}>
@@ -78,13 +82,17 @@ const RegisterForm: React.FC = () => {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-2">
+                <FormLabel className="flex items-center gap-2 text-gray-300">
                   <User className="h-4 w-4" /> Name
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your name" {...field} />
+                  <Input
+                    placeholder="Enter your name"
+                    {...field}
+                    className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:ring-blue-500 focus:border-blue-500"
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-400" />
               </FormItem>
             )}
           />
@@ -93,13 +101,17 @@ const RegisterForm: React.FC = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-2">
+                <FormLabel className="flex items-center gap-2 text-gray-300">
                   <Mail className="h-4 w-4" /> Email
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your email" {...field} />
+                  <Input
+                    placeholder="Enter your email"
+                    {...field}
+                    className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:ring-blue-500 focus:border-blue-500"
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-400" />
               </FormItem>
             )}
           />
@@ -109,7 +121,7 @@ const RegisterForm: React.FC = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-2">
+                <FormLabel className="flex items-center gap-2 text-gray-300">
                   <Lock className="h-4 w-4" /> Password
                 </FormLabel>
                 <FormControl>
@@ -117,9 +129,10 @@ const RegisterForm: React.FC = () => {
                     type="password"
                     placeholder="Enter your password"
                     {...field}
+                    className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-400" />
               </FormItem>
             )}
           />
@@ -129,7 +142,7 @@ const RegisterForm: React.FC = () => {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-2">
+                <FormLabel className="flex items-center gap-2 text-gray-300">
                   <KeyRound className="h-4 w-4" /> Confirm Password
                 </FormLabel>
                 <FormControl>
@@ -137,14 +150,19 @@ const RegisterForm: React.FC = () => {
                     type="password"
                     placeholder="Confirm your password"
                     {...field}
+                    className="bg-gray-700 border-gray-600 text-white placeholder:text-gray-400 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-400" />
               </FormItem>
             )}
           />
 
-          <Button type="submit" disabled={isLoading} className="w-full">
+          <Button
+            type="submit"
+            disabled={isLoading}
+            className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 mt-2 transition-colors"
+          >
             {isLoading ? "Registering..." : "Register"}
           </Button>
         </form>

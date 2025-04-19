@@ -33,7 +33,13 @@ import { fetchProvincesRequest } from "@/app/redux/sagas/locationsSaga";
 import { fetchCategoriesRequest } from "@/app/redux/sagas/categoriesSaga";
 import { Skeleton } from "../ui/skeleton";
 import Image from "next/image";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "../ui/select";
 import { Textarea } from "../ui/textarea";
 // Action creator helper types to match saga expectations
 const createListing = (data: ListingFormData) =>
@@ -107,8 +113,8 @@ const ListingForm: React.FC<ListingFormProps> = ({
         provinces?.[Math.floor(Math.random() * provinces.length)]?.districts?.[
           Math.floor(
             Math.random() *
-            provinces[Math.floor(Math.random() * provinces.length)].districts
-              .length
+              provinces[Math.floor(Math.random() * provinces.length)].districts
+                .length
           )
         ]?.id ||
         "",
@@ -200,7 +206,8 @@ const ListingForm: React.FC<ListingFormProps> = ({
             {isEditing ? "Edit Listing" : "Create New Listing"}
           </h2>
           <p className="text-gray-400 mt-1">
-            Fill in the details to {isEditing ? "update your" : "post a new"} listing
+            Fill in the details to {isEditing ? "update your" : "post a new"}{" "}
+            listing
           </p>
         </div>
 
@@ -213,7 +220,9 @@ const ListingForm: React.FC<ListingFormProps> = ({
                   <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center mr-3">
                     <Tag className="h-5 w-5 text-indigo-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white">Basic Information</h3>
+                  <h3 className="text-lg font-semibold text-white">
+                    Basic Information
+                  </h3>
                 </div>
 
                 <div className="pl-12 space-y-6">
@@ -223,7 +232,9 @@ const ListingForm: React.FC<ListingFormProps> = ({
                     name="title"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-medium text-gray-300">Title *</FormLabel>
+                        <FormLabel className="font-medium text-gray-300">
+                          Title *
+                        </FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Enter a descriptive title"
@@ -266,7 +277,9 @@ const ListingForm: React.FC<ListingFormProps> = ({
                   <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center mr-3">
                     <DollarSign className="h-5 w-5 text-indigo-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white">Category & Price</h3>
+                  <h3 className="text-lg font-semibold text-white">
+                    Category & Price
+                  </h3>
                 </div>
 
                 <div className="pl-12 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -280,15 +293,16 @@ const ListingForm: React.FC<ListingFormProps> = ({
                           Category *
                         </FormLabel>
                         <FormControl>
-                          <Select
-                            {...field}
-                          >
+                          <Select {...field} onValueChange={field.onChange}>
                             <SelectTrigger className="bg-gray-800/60 border-gray-700 focus:border-indigo-500 transition-all focus:ring-1 focus:ring-indigo-500 w-full">
                               <SelectValue placeholder="Select a category" />
                             </SelectTrigger>
                             <SelectContent>
                               {categories.map((category) => (
-                                <SelectItem key={category.id} value={category.id}>
+                                <SelectItem
+                                  key={category.id}
+                                  value={category.id}
+                                >
                                   {category.name}
                                 </SelectItem>
                               ))}
@@ -345,14 +359,17 @@ const ListingForm: React.FC<ListingFormProps> = ({
                           District *
                         </FormLabel>
                         <FormControl>
-                          <Select>
+                          <Select {...field} onValueChange={field.onChange}>
                             <SelectTrigger className="bg-gray-800/60 border-gray-700 focus:border-indigo-500 transition-all focus:ring-1 focus:ring-indigo-500 w-full">
                               <SelectValue placeholder="Select a district" />
                             </SelectTrigger>
-                            <SelectContent >
+                            <SelectContent>
                               {provinces.flatMap((province) =>
                                 province.districts.map((district) => (
-                                  <SelectItem key={district.id} value={district.id}>
+                                  <SelectItem
+                                    key={district.id}
+                                    value={district.id}
+                                  >
                                     {district.name} ({province.name})
                                   </SelectItem>
                                 ))
@@ -394,9 +411,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
                       <span className="text-indigo-400 font-medium">
                         Click to upload
                       </span>{" "}
-                      <span className="text-gray-400">
-                        or drag and drop
-                      </span>
+                      <span className="text-gray-400">or drag and drop</span>
                       <p className="text-xs text-gray-500 mt-2">
                         PNG, JPG, GIF up to 5MB
                       </p>

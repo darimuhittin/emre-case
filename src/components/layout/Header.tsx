@@ -7,7 +7,9 @@ import { useRouter } from "next/navigation";
 import { RootState } from "../../app/redux/store";
 import { logoutRequest } from "../../app/redux/sagas/authSaga";
 import { Skeleton } from "../ui/skeleton";
-
+import { Button } from "../ui/button";
+import Image from "next/image";
+import { UserCircle, LogOut } from "lucide-react";
 const Header: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -30,7 +32,7 @@ const Header: React.FC = () => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link href="/" className="text-2xl font-bold text-white flex-1">
-            ProAds
+            <Image src="/logo.png" alt="logo" width={118} height={20} />
           </Link>
 
           {/* Desktop Navigation */}
@@ -55,50 +57,38 @@ const Header: React.FC = () => {
             <div className="hidden md:flex items-center gap-4 flex-1 justify-end">
               {isAuthenticated ? (
                 <>
-                  <Link
-                    href="/listings/create"
+                  <Button
+                    variant="default"
                     className="text-gray-300 hover:text-primary-400"
+                    onClick={() => router.push("/listings/create")}
                   >
                     Post a Listing
-                  </Link>
+                  </Button>
                   <div className="relative group">
                     <button className="flex items-center text-gray-300 hover:text-primary-400">
                       <span className="mr-1">{user?.email}</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
+                      <UserCircle className="h-8 w-8" />
                     </button>
-                    <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-secondary-700 border border-secondary-600 hidden group-hover:block z-50">
-                      <div className="py-1">
-                        <Link
-                          href="/profile"
-                          className="block px-4 py-2 text-gray-300 hover:bg-secondary-600"
-                        >
-                          My Profile
-                        </Link>
-                        <Link
-                          href="/my-ads"
-                          className="block px-4 py-2 text-gray-300 hover:bg-secondary-600"
-                        >
-                          My Ads
-                        </Link>
-                        <button
-                          onClick={handleLogout}
-                          className="block w-full text-left px-4 py-2 text-gray-300 hover:bg-secondary-600"
-                        >
-                          Logout
-                        </button>
+                    <div className="absolute right-0 w-48 bg-secondary-700 border-secondary-600 text-gray-300 rounded-md shadow-lg invisible group-hover:visible hover:visible transition-all duration-300 z-10 overflow-hidden">
+                      <div className="h-2 absolute -top-2 left-0 right-0"></div>
+                      <Link
+                        href="/profile"
+                        className="block px-4 py-2 cursor-pointer hover:bg-secondary-600"
+                      >
+                        My Profile
+                      </Link>
+                      <Link
+                        href="/my-listings"
+                        className="block px-4 py-2 cursor-pointer hover:bg-secondary-600"
+                      >
+                        My Listings
+                      </Link>
+                      <div
+                        onClick={handleLogout}
+                        className="flex items-center text-gray-300 hover:bg-secondary-600 cursor-pointer px-4 py-2 hover:text-red-500"
+                      >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        <span>Logout</span>
                       </div>
                     </div>
                   </div>
@@ -237,15 +227,15 @@ const Header: React.FC = () => {
                     >
                       My Ads
                     </Link>
-                    <button
+                    <Button
                       onClick={() => {
                         handleLogout();
                         setMobileMenuOpen(false);
                       }}
-                      className="text-left text-gray-300 hover:bg-secondary-700 px-4 py-2 rounded-md w-full"
+                      className="w-full cursor-pointer hover:bg-secondary-600"
                     >
                       Logout
-                    </button>
+                    </Button>
                   </>
                 ) : (
                   <>

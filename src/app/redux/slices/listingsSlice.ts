@@ -21,6 +21,10 @@ const initialState: ListingsState = {
   updateListingError: null,
   deleteListingLoading: false,
   deleteListingError: null,
+
+  fetchMyListingsLoading: false,
+  fetchMyListingsError: null,
+  myListings: [],
 };
 
 // Listings slice
@@ -37,6 +41,7 @@ const listingsSlice = createSlice({
         provinceId?: string;
         districtId?: string;
         search?: string;
+        userId?: string;
       }>
     ) => {
       state.isLoading = true;
@@ -48,6 +53,20 @@ const listingsSlice = createSlice({
         }
       }
     },
+
+    fetchMyListingsRequest: (state) => {
+      state.fetchMyListingsLoading = true;
+      state.fetchMyListingsError = null;
+    },
+    fetchMyListingsSuccess: (state, action: PayloadAction<Listing[]>) => {
+      state.fetchMyListingsLoading = false;
+      state.myListings = action.payload;
+    },
+    fetchMyListingsFailure: (state, action: PayloadAction<string>) => {
+      state.fetchMyListingsLoading = false;
+      state.fetchMyListingsError = action.payload;
+    },
+
     fetchListingsSuccess: (
       state,
       action: PayloadAction<ApiResponseMultiple<Listing>>
@@ -240,6 +259,9 @@ export const {
   clearError,
   setFilters,
   clearFilters,
+  fetchMyListingsRequest,
+  fetchMyListingsSuccess,
+  fetchMyListingsFailure,
 } = listingsSlice.actions;
 
 export default listingsSlice.reducer;

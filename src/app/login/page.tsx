@@ -1,34 +1,31 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
-import { RootState } from "../redux/store";
+import React from "react";
 import LoginForm from "../../components/auth/LoginForm";
 import Link from "next/link";
 
 export default function Login() {
-  const router = useRouter();
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
-
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/");
-    }
-  }, [isAuthenticated, router]);
-
   return (
-    <div className="container mx-auto px-4 py-16">
-      <div className="max-w-md mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8">
-          Login to Your Account
-        </h1>
-        <LoginForm />
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white p-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold mb-2 text-white">Welcome Back</h1>
+          <p className="text-gray-400">Sign in to access your account</p>
+        </div>
+
+        <div className="bg-gray-800 rounded-lg shadow-xl overflow-hidden border border-gray-700">
+          <div className="p-8">
+            <LoginForm />
+          </div>
+        </div>
+
         <div className="mt-6 text-center">
-          <p className="text-gray-600">
+          <p className="text-gray-400">
             Don&apos;t have an account?{" "}
-            <Link href="/register" className="text-blue-600 hover:underline">
+            <Link
+              href="/register"
+              className="text-blue-400 hover:text-blue-300 transition-colors"
+            >
               Register here
             </Link>
           </p>

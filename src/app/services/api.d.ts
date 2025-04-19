@@ -95,6 +95,8 @@ export interface Listing {
   district: District;
   createdAt: string;
   updatedAt: string;
+  userId: string;
+  slug: string;
 }
 
 export interface ListingResponse {

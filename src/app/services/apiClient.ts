@@ -20,6 +20,8 @@ import {
 } from "./api.d";
 import { navigate } from "./navigationService";
 import { toast } from "sonner";
+import { logoutRequest } from "../redux/sagas/authSaga";
+import { useDispatch } from "react-redux";
 
 const API_URL = "http://localhost:8000";
 
@@ -104,6 +106,8 @@ class ApiClient {
             localStorage.removeItem("refreshToken");
             // In real app, you might want to dispatch a logout action or redirect
             toast.error("Session expired, please login again");
+            const dispatch = useDispatch();
+            dispatch(logoutRequest());
             navigate("/login");
             return Promise.reject(refreshError);
           }
@@ -178,6 +182,7 @@ class ApiClient {
     search?: string;
     page?: number;
     limit?: number;
+    userId?: string;
   }): Promise<ApiResponseMultiple<Listing>> => {
     const response = await this.client.get<ApiResponseMultiple<Listing>>(
       "/listings",
@@ -375,6 +380,13 @@ class ApiClient {
   ): Promise<ApiResponse<{ message: string }>> => {
     const response = await this.client.delete<ApiResponse<{ message: string }>>(
       `/locations/districts/${id}`
+    );
+    return response.data;
+  };
+
+  getMyListings = async (): Promise<ApiResponseMultiple<Listing>> => {
+    const response = await this.client.get<ApiResponseMultiple<Listing>>(
+      `/listings/my`
     );
     return response.data;
   };
