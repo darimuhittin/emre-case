@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,9 +11,11 @@ import { Skeleton } from "../ui/skeleton";
 const Header: React.FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { user, isAuthenticated, isLoading: isAuthLoading } = useSelector(
-    (state: RootState) => state.auth
-  );
+  const {
+    user,
+    isAuthenticated,
+    isLoading: isAuthLoading,
+  } = useSelector((state: RootState) => state.auth);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -27,8 +29,8 @@ const Header: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <Link href="/" className="text-2xl font-bold text-primary-500 flex-1">
-            AdPlatform
+          <Link href="/" className="text-2xl font-bold text-white flex-1">
+            ProAds
           </Link>
 
           {/* Desktop Navigation */}
@@ -36,15 +38,17 @@ const Header: React.FC = () => {
             <Link href="/" className="text-gray-300 hover:text-primary-400">
               Home
             </Link>
-            <Link href="/ads" className="text-gray-300 hover:text-primary-400">
-              Browse Ads
+            <Link
+              href="/listings"
+              className="text-gray-300 hover:text-primary-400"
+            >
+              Browse Listings
             </Link>
           </nav>
 
           {/* User menu (desktop) */}
           {isAuthLoading ? (
             <div className="flex-1 justify-end flex">
-
               <Skeleton className="w-8 h-8 rounded-full self-end" />
             </div>
           ) : (
@@ -52,10 +56,10 @@ const Header: React.FC = () => {
               {isAuthenticated ? (
                 <>
                   <Link
-                    href="/ads/create"
+                    href="/listings/create"
                     className="text-gray-300 hover:text-primary-400"
                   >
-                    Post an Ad
+                    Post a Listing
                   </Link>
                   <div className="relative group">
                     <button className="flex items-center text-gray-300 hover:text-primary-400">
@@ -203,21 +207,21 @@ const Header: React.FC = () => {
                   Home
                 </Link>
                 <Link
-                  href="/ads"
+                  href="/listings"
                   className="text-gray-300 hover:bg-secondary-700 px-4 py-2 rounded-md"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Browse Ads
+                  Browse Listings
                 </Link>
 
                 {isAuthenticated ? (
                   <>
                     <Link
-                      href="/ads/create"
+                      href="/listings/create"
                       className="text-gray-300 hover:bg-secondary-700 px-4 py-2 rounded-md"
                       onClick={() => setMobileMenuOpen(false)}
                     >
-                      Post an Ad
+                      Post a Listing
                     </Link>
                     <Link
                       href="/profile"

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ListingsState, Listing } from "../../types";
+import { ListingsState, Listing, ListingFormData } from "../../types";
 import { ApiResponseMultiple } from "../../services/api.d";
+import { toast } from "sonner";
 
 // Initial state
 const initialState: ListingsState = {
@@ -78,7 +79,7 @@ const listingsSlice = createSlice({
     },
 
     // Create listing
-    createListingRequest: (state) => {
+    createListingRequest: (state, _: PayloadAction<ListingFormData>) => {
       state.createListingLoading = true;
       state.createListingError = null;
     },
@@ -86,14 +87,22 @@ const listingsSlice = createSlice({
       state.createListingLoading = false;
       state.listings = [action.payload, ...state.listings];
       state.totalListings += 1;
+      toast.success("Listing created successfully");
     },
     createListingFailure: (state, action: PayloadAction<string>) => {
       state.createListingLoading = false;
       state.createListingError = action.payload;
+      toast.error("Failed to create listing");
     },
 
     // Update listing
-    updateListingRequest: (state) => {
+    updateListingRequest: (
+      state,
+      _: PayloadAction<{
+        id: string;
+        data: ListingFormData;
+      }>
+    ) => {
       state.updateListingLoading = true;
       state.updateListingError = null;
     },
@@ -105,10 +114,12 @@ const listingsSlice = createSlice({
       if (state.selectedListing?.id === action.payload.id) {
         state.selectedListing = action.payload;
       }
+      toast.success("Listing updated successfully");
     },
     updateListingFailure: (state, action: PayloadAction<string>) => {
       state.updateListingLoading = false;
       state.updateListingError = action.payload;
+      toast.error("Failed to update listing");
     },
 
     // Delete listing
@@ -125,10 +136,12 @@ const listingsSlice = createSlice({
       if (state.selectedListing?.id === action.payload) {
         state.selectedListing = null;
       }
+      toast.success("Listing deleted successfully");
     },
     deleteListingFailure: (state, action: PayloadAction<string>) => {
       state.deleteListingLoading = false;
       state.deleteListingError = action.payload;
+      toast.error("Failed to delete listing");
     },
 
     // Upload listing image
@@ -144,10 +157,12 @@ const listingsSlice = createSlice({
       if (state.selectedListing?.id === action.payload.id) {
         state.selectedListing = action.payload;
       }
+      toast.success("Listing image uploaded successfully");
     },
     uploadListingImageFailure: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.error = action.payload;
+      toast.error("Failed to upload listing image");
     },
 
     // Delete listing image
@@ -163,10 +178,12 @@ const listingsSlice = createSlice({
       if (state.selectedListing?.id === action.payload.id) {
         state.selectedListing = action.payload;
       }
+      toast.success("Listing image deleted successfully");
     },
     deleteListingImageFailure: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.error = action.payload;
+      toast.error("Failed to delete listing image");
     },
 
     // Reset selected listing
@@ -177,6 +194,22 @@ const listingsSlice = createSlice({
     // Clear error
     clearError: (state) => {
       state.error = null;
+    },
+
+    setFilters: (
+      state,
+      action: PayloadAction<{
+        categoryId?: string;
+        provinceId?: string;
+        districtId?: string;
+        search?: string;
+      }>
+    ) => {
+      state.filters = { ...state.filters, ...action.payload };
+    },
+
+    clearFilters: (state) => {
+      state.filters = {};
     },
   },
 });
@@ -205,6 +238,8 @@ export const {
   deleteListingImageFailure,
   resetSelectedListing,
   clearError,
+  setFilters,
+  clearFilters,
 } = listingsSlice.actions;
 
 export default listingsSlice.reducer;

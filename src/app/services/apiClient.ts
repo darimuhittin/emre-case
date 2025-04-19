@@ -18,6 +18,8 @@ import {
   ApiResponseMultiple,
   RegisterResponse,
 } from "./api.d";
+import { navigate } from "./navigationService";
+import { toast } from "sonner";
 
 const API_URL = "http://localhost:8000";
 
@@ -101,7 +103,8 @@ class ApiClient {
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
             // In real app, you might want to dispatch a logout action or redirect
-            window.location.href = "/login";
+            toast.error("Session expired, please login again");
+            navigate("/login");
             return Promise.reject(refreshError);
           }
         }
@@ -124,10 +127,7 @@ class ApiClient {
   };
 
   login = async (data: LoginRequest): Promise<AuthResponse> => {
-    const response = await this.client.post<AuthResponse>(
-      "/auth/login",
-      data
-    );
+    const response = await this.client.post<AuthResponse>("/auth/login", data);
     localStorage.setItem("accessToken", response.data.accessToken);
     localStorage.setItem("refreshToken", response.data.refreshToken);
     return response.data;

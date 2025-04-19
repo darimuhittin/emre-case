@@ -1,7 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import authReducer from "./slices/authSlice";
-import listingsReducer from "./slices/listingsSlice";
+import listingsReducer, {
+  createListingRequest,
+  updateListingRequest,
+} from "./slices/listingsSlice";
 import categoriesReducer from "./slices/categoriesSlice";
 import locationsReducer from "./slices/locationsSlice";
 import rootSaga from "./sagas/rootSaga";
@@ -16,7 +19,12 @@ export const store = configureStore({
     locations: locationsReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
+    getDefaultMiddleware({
+      thunk: false,
+      serializableCheck: {
+        ignoredActions: [createListingRequest.type, updateListingRequest.type],
+      },
+    }).concat(sagaMiddleware),
 });
 
 sagaMiddleware.run(rootSaga);

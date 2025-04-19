@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AuthState, User } from "../../types";
-
+import { toast } from "sonner";
 // Initial state
 const initialState: AuthState = {
   user: null,
@@ -45,22 +45,26 @@ const authSlice = createSlice({
       state.refreshToken = action.payload.refreshToken;
       state.isAuthenticated = true;
       state.error = null;
+      toast.success("Login successful");
     },
     // Login failure
     loginFailure: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.error = action.payload;
       state.isAuthenticated = false;
+      toast.error("Login failed");
     },
     // Register success
     registerSuccess: (state) => {
       state.isLoading = false;
       state.error = null;
+      toast.success("Register successful");
     },
     // Register failure
     registerFailure: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.error = action.payload;
+      toast.error("Register failed");
     },
     // Logout success
     logoutSuccess: (state) => {
@@ -70,11 +74,13 @@ const authSlice = createSlice({
       state.refreshToken = null;
       state.isAuthenticated = false;
       state.error = null;
+      toast.success("Logout successful");
     },
     // Logout failure
     logoutFailure: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.error = action.payload;
+      toast.error("Logout failed");
     },
     // Fetch user profile success
     fetchUserProfileSuccess: (state, action: PayloadAction<User>) => {
@@ -94,11 +100,13 @@ const authSlice = createSlice({
         state.user.isEmailVerified = true;
       }
       state.error = null;
+      toast.success("Email verified successfully");
     },
     // Verify email failure
     verifyEmailFailure: (state, action: PayloadAction<string>) => {
       state.isLoading = false;
       state.error = action.payload;
+      toast.error("Email verification failed");
     },
   },
 });

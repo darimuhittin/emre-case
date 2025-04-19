@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setFilters, clearFilters } from "../../app/redux/slices/adsSlice";
 import { RootState } from "../../app/redux/store";
 import ListingCard from "./ListingCard";
 import { Listing } from "../../app/types";
@@ -9,6 +8,7 @@ import { fetchListingsRequest } from "../../app/redux/slices/listingsSlice";
 import ListPagination from "../shared/ListPagination";
 import { fetchCategoriesRequest } from "../../app/redux/sagas/categoriesSaga";
 import { fetchProvincesRequest } from "../../app/redux/sagas/locationsSaga";
+import { setFilters, clearFilters } from "../../app/redux/slices/listingsSlice";
 import {
   Select,
   SelectContent,
@@ -31,6 +31,7 @@ const ListingsList: React.FC = () => {
     totalListings,
   } = useSelector((state: RootState) => state.listings);
 
+  console.log(filters);
   const categories = useSelector(
     (state: RootState) => state.categories.categories
   );
@@ -44,15 +45,6 @@ const ListingsList: React.FC = () => {
     dispatch(fetchCategoriesRequest());
     dispatch(fetchProvincesRequest());
   }, [dispatch]);
-
-  // Handle filter changes
-  const handleFilterChange = (
-    value: string,
-    filterType: "category" | "province"
-  ) => {
-    const filteredValue = value === "All" ? "" : value;
-    dispatch(setFilters({ [filterType]: filteredValue }));
-  };
 
   // Handle clear filters
   const handleClearFilters = () => {
@@ -71,19 +63,21 @@ const ListingsList: React.FC = () => {
       <h2 className="text-2xl font-bold mb-6">Browse Advertisements</h2>
 
       {/* Filters */}
-      <div className="bg-white p-4 rounded-lg shadow-md mb-6">
+      <div className="bg-secondary-100/90 p-4 rounded-lg shadow-md mb-6">
         <div className="flex flex-col md:flex-row md:items-center gap-4">
           <div className="flex-1">
             <Label htmlFor="category">Category</Label>
             <Select
-              value={filters.categoryId || "All"}
-              onValueChange={(value) => handleFilterChange(value, "category")}
+              value={filters.categoryId || ""}
+              onValueChange={(value) => {
+                console.log(value);
+                dispatch(setFilters({ categoryId: value }));
+              }}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="All">All</SelectItem>
                 {categories?.map((category) => (
                   <SelectItem key={category.id} value={category.id}>
                     {category.name}
@@ -96,16 +90,16 @@ const ListingsList: React.FC = () => {
           <div className="flex-1">
             <Label htmlFor="province">Province</Label>
             <Select
-              value={filters.provinceId || "All"}
-              onValueChange={(value) =>
-                dispatch(setFilters({ province: value === "All" ? "" : value }))
-              }
+              value={filters.provinceId || ""}
+              onValueChange={(value) => {
+                console.log(value);
+                dispatch(setFilters({ provinceId: value }));
+              }}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a province" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="All">All</SelectItem>
                 {provinces?.map((province) => (
                   <SelectItem key={province.id} value={province.id}>
                     {province.name}
@@ -138,7 +132,7 @@ const ListingsList: React.FC = () => {
       ) : (
         <>
           {/* Results count */}
-          <p className="text-gray-600 mb-4">
+          <p className="text-white mb-4">
             {totalListings}{" "}
             {totalListings === 1 ? "advertisement" : "advertisements"} found
           </p>

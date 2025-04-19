@@ -25,8 +25,9 @@ import {
   deleteListingImageSuccess,
   deleteListingImageFailure,
 } from "../slices/listingsSlice";
+import { navigate } from "../../services/navigationService";
 import { ListingFormData } from "../../types";
-import { useRouter } from "next/navigation";
+
 export const FETCH_LISTING_REQUEST = "listings/fetchListingRequest";
 export const DELETE_LISTING_REQUEST = "listings/deleteListingRequest";
 
@@ -81,7 +82,6 @@ function* fetchListingWorker(action: PayloadAction<string>) {
 }
 
 function* createListingWorker(action: PayloadAction<ListingFormData>) {
-  const router = useRouter();
   try {
     const { images, ...listingData } = action.payload;
     const response = yield call(apiClient.createListing, {
@@ -100,16 +100,11 @@ function* createListingWorker(action: PayloadAction<ListingFormData>) {
         yield call(apiClient.uploadListingImage, listing.id, image);
       }
 
-      // Refetch the listing to get the updated images
-      const updatedResponse = yield call(
-        apiClient.getListingBySlug,
-        listing.id
-      );
-      yield put(createListingSuccess(updatedResponse));
-      router.push(`/listings/${listing.id}`);
+      yield put(createListingSuccess(listing));
+      yield call(navigate, `/listings/${listing.slug}`);
     } else {
       yield put(createListingSuccess(listing));
-      router.push(`/listings/${listing.id}`);
+      yield call(navigate, `/listings/${listing.slug}`);
     }
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;
