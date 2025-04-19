@@ -4,14 +4,11 @@ import { AuthState, User } from "../../types";
 // Initial state
 const initialState: AuthState = {
   user: null,
-  accessToken:
-    typeof window !== "undefined" ? localStorage.getItem("accessToken") : null,
-  refreshToken:
-    typeof window !== "undefined" ? localStorage.getItem("refreshToken") : null,
-  isLoading: false,
+  accessToken: null,
+  refreshToken: null,
+  isLoading: true,
   error: null,
-  isAuthenticated:
-    typeof window !== "undefined" && !!localStorage.getItem("accessToken"),
+  isAuthenticated: false,
 };
 
 // Auth slice
@@ -36,6 +33,7 @@ const authSlice = createSlice({
         state.refreshToken = refreshToken;
         state.isAuthenticated = !!accessToken;
       }
+      state.isLoading = false;
     },
     // Login success
     loginSuccess: (

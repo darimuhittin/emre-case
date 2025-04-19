@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { RootState } from "../redux/store";
 import { fetchAdsRequest } from "../redux/slices/adsSlice";
-import ListingCard from "../components/listings/ListingCard";
+import ListingCard from "../../components/listings/ListingCard";
 import { Ad } from "../types";
 
 export default function MyAds() {

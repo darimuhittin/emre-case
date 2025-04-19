@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { RootState } from "./redux/store";
-import ListingCard from "./components/listings/ListingCard";
+import ListingCard from "../components/listings/ListingCard";
 import { Listing } from "./types";
 import { fetchListingsRequest } from "./redux/slices/listingsSlice";
 import { fetchCategoriesRequest } from "./redux/sagas/categoriesSaga";

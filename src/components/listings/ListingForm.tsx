@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -13,9 +15,8 @@ import {
   Image as ImageIcon,
   Plus
 } from "lucide-react";
-import { RootState } from "../../redux/store";
-import { createAdRequest, updateAdRequest } from "../../redux/slices/adsSlice";
-import { Ad } from "../../types";
+import { RootState } from "../../app/redux/store";
+import { Listing, ListingFormData } from "../../app/types";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -26,74 +27,93 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { createListingRequest, updateListingRequest } from "@/app/redux/slices/listingsSlice";
+import { fetchProvincesRequest } from "@/app/redux/sagas/locationsSaga";
+import { fetchCategoriesRequest } from "@/app/redux/sagas/categoriesSaga";
+import { Skeleton } from "../ui/skeleton";
+// Action creator helper types to match saga expectations
+const createListing = (data: ListingFormData) => createListingRequest(data as any);
+const updateListing = (id: string, data: ListingFormData) =>
+  updateListingRequest({ id, data } as any);
 
-interface AdFormProps {
-  ad?: Ad;
+interface ListingFormProps {
+  listing?: Listing;
   isEditing?: boolean;
 }
 
 // Define schema with Zod
-const adSchema = z.object({
+const listingSchema = z.object({
   title: z.string()
     .min(1, "Title is required")
     .max(100, "Title must be 100 characters or less"),
   description: z.string().min(1, "Description is required"),
-  category: z.string().min(1, "Category is required"),
-  province: z.string().min(1, "Province is required"),
-  district: z.string().min(1, "District is required"),
+  categoryId: z.string().min(1, "Category is required"),
+  districtId: z.string().min(1, "District is required"),
   price: z.coerce.number()
     .min(0, "Price must be a positive number"),
   images: z.any().default([]),
 });
 
-type AdFormValues = z.infer<typeof adSchema>;
+type ListingFormValues = z.infer<typeof listingSchema>;
 
-const AdForm: React.FC<AdFormProps> = ({ ad, isEditing = false }) => {
+const ListingForm: React.FC<ListingFormProps> = ({ listing, isEditing = false }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { isLoading } = useSelector((state: RootState) => state.ads);
+
+  const { isLoading } = useSelector((state: RootState) => state.listings);
+
+  const { provinces } = useSelector((state: RootState) => state.locations);
+
+  const { categories } = useSelector((state: RootState) => state.categories);
+
+  const { isLoading: isAuthLoading } = useSelector((state: RootState) => state.auth);
+  useEffect(() => {
+    if (!isAuthLoading) {
+      dispatch(fetchProvincesRequest());
+      dispatch(fetchCategoriesRequest());
+    }
+  }, [dispatch, isAuthLoading]);
 
   // State for managing image previews
   const [imagePreviews, setImagePreviews] = useState<string[]>(
-    ad && ad.images ? ad.images : []
+    listing && listing.images ? listing.images : []
   );
 
   // Initialize form with validation
-  const form = useForm<AdFormValues>({
-    resolver: zodResolver(adSchema),
+  const form = useForm<ListingFormValues>({
+    resolver: zodResolver(listingSchema),
     defaultValues: {
-      title: ad?.title || "",
-      description: ad?.description || "",
-      category: ad?.category || "",
-      province: ad?.province || "",
-      district: ad?.district || "",
-      price: ad?.price || 0,
+      title: listing?.title || "Example Title",
+      description: listing?.description || "Example Description",
+      categoryId: listing?.category?.id || categories?.[Math.floor(Math.random() * categories.length)]?.id || "",
+      districtId: listing?.district?.id || provinces?.[Math.floor(Math.random() * provinces.length)]?.districts?.[Math.floor(Math.random() * provinces[Math.floor(Math.random() * provinces.length)].districts.length)]?.id || "",
+      price: listing?.price || Math.floor(Math.random() * 1000),
       images: [],
     },
   });
 
-  // Watch province to enable/disable district selection
-  const selectedProvince = form.watch("province");
+  // Watch districtId to enable/disable district selection
+  const selectedCategory = form.watch("categoryId");
 
   // Handle form submission
-  const onSubmit = (values: AdFormValues) => {
-    // We need to ensure 'images' is always present in the data
-    const formData = {
-      ...values,
-      images: values.images || []
+  const onSubmit = (values: ListingFormValues) => {
+    // Create a properly typed FormData object
+    const formData: ListingFormData = {
+      title: values.title,
+      description: values.description,
+      price: values.price,
+      categoryId: values.categoryId,
+      districtId: values.districtId,
+      images: values.images ? Array.from(values.images) : []
     };
 
-    if (isEditing && ad) {
-      dispatch(
-        updateAdRequest({
-          id: ad.id,
-          data: formData,
-        })
-      );
-      router.push(`/ads/${ad.id}`);
+    if (isEditing && listing) {
+      dispatch(updateListing(listing.id, formData));
+      // router.push(`/listings/${listing.id}`);
     } else {
-      dispatch(createAdRequest(formData));
-      router.push("/my-ads");
+      dispatch(createListing(formData));
+
+      // router.push("/my-listings");
     }
   };
 
@@ -138,46 +158,12 @@ const AdForm: React.FC<AdFormProps> = ({ ad, isEditing = false }) => {
     }
   };
 
-  const categories = [
-    "Electronics",
-    "Vehicles",
-    "Real Estate",
-    "Furniture",
-    "Clothing",
-    "Services",
-    "Jobs",
-    "Other",
-  ];
 
-  const provinces = [
-    "Istanbul",
-    "Ankara",
-    "Izmir",
-    "Bursa",
-    "Antalya",
-    "Adana",
-    "Other",
-  ];
-
-  const getDistricts = (province: string) => {
-    switch (province) {
-      case "Istanbul":
-        return ["Kadikoy", "Besiktas", "Sisli", "Uskudar", "Fatih", "Other"];
-      case "Ankara":
-        return [
-          "Cankaya",
-          "Kecioren",
-          "Yenimahalle",
-          "Mamak",
-          "Etimesgut",
-          "Other",
-        ];
-      case "Izmir":
-        return ["Konak", "Karsiyaka", "Bornova", "Buca", "Cigli", "Other"];
-      default:
-        return ["Central", "Other"];
-    }
-  };
+  if (isAuthLoading) {
+    return <div className="flex justify-center items-center h-screen">
+      <Skeleton className="w-full h-full" />
+    </div>
+  }
 
   return (
     <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
@@ -225,7 +211,7 @@ const AdForm: React.FC<AdFormProps> = ({ ad, isEditing = false }) => {
           {/* Category */}
           <FormField
             control={form.control}
-            name="category"
+            name="categoryId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="flex items-center gap-2">
@@ -238,8 +224,8 @@ const AdForm: React.FC<AdFormProps> = ({ ad, isEditing = false }) => {
                   >
                     <option value="">Select a category</option>
                     {categories.map((category) => (
-                      <option key={category} value={category}>
-                        {category}
+                      <option key={category.id} value={category.id}>
+                        {category.name}
                       </option>
                     ))}
                   </select>
@@ -276,33 +262,7 @@ const AdForm: React.FC<AdFormProps> = ({ ad, isEditing = false }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
-              name="province"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4" /> Province *
-                  </FormLabel>
-                  <FormControl>
-                    <select
-                      {...field}
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                    >
-                      <option value="">Select a province</option>
-                      {provinces.map((province) => (
-                        <option key={province} value={province}>
-                          {province}
-                        </option>
-                      ))}
-                    </select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="district"
+              name="districtId"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="flex items-center gap-2">
@@ -311,16 +271,17 @@ const AdForm: React.FC<AdFormProps> = ({ ad, isEditing = false }) => {
                   <FormControl>
                     <select
                       {...field}
-                      disabled={!selectedProvince}
                       className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <option value="">Select a district</option>
-                      {selectedProvince &&
-                        getDistricts(selectedProvince).map((district) => (
-                          <option key={district} value={district}>
-                            {district}
+                      {/* Here we should fetch districts from API */}
+                      {provinces.flatMap(province =>
+                        province.districts.map(district => (
+                          <option key={`${province.name}-${district.name}`} value={district.id}>
+                            {district.name} ({province.name})
                           </option>
-                        ))}
+                        ))
+                      )}
                     </select>
                   </FormControl>
                   <FormMessage />
@@ -395,8 +356,8 @@ const AdForm: React.FC<AdFormProps> = ({ ad, isEditing = false }) => {
                   ? "Updating..."
                   : "Creating..."
                 : isEditing
-                  ? "Update Advertisement"
-                  : "Create Advertisement"}
+                  ? "Update Listing"
+                  : "Create Listing"}
             </Button>
           </div>
         </form>
@@ -405,4 +366,4 @@ const AdForm: React.FC<AdFormProps> = ({ ad, isEditing = false }) => {
   );
 };
 
-export default AdForm;
+export default ListingForm;

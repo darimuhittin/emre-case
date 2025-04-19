@@ -26,7 +26,7 @@ import {
   deleteListingImageFailure,
 } from "../slices/listingsSlice";
 import { ListingFormData } from "../../types";
-
+import { useRouter } from "next/navigation";
 export const FETCH_LISTING_REQUEST = "listings/fetchListingRequest";
 export const DELETE_LISTING_REQUEST = "listings/deleteListingRequest";
 
@@ -81,6 +81,7 @@ function* fetchListingWorker(action: PayloadAction<string>) {
 }
 
 function* createListingWorker(action: PayloadAction<ListingFormData>) {
+  const router = useRouter();
   try {
     const { images, ...listingData } = action.payload;
     const response = yield call(apiClient.createListing, {
@@ -105,8 +106,10 @@ function* createListingWorker(action: PayloadAction<ListingFormData>) {
         listing.id
       );
       yield put(createListingSuccess(updatedResponse));
+      router.push(`/listings/${listing.id}`);
     } else {
       yield put(createListingSuccess(listing));
+      router.push(`/listings/${listing.id}`);
     }
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;

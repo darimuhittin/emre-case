@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setFilters, clearFilters } from "../../redux/slices/adsSlice";
-import { RootState } from "../../redux/store";
+import { setFilters, clearFilters } from "../../app/redux/slices/adsSlice";
+import { RootState } from "../../app/redux/store";
 import ListingCard from "./ListingCard";
-import { Listing } from "../../types";
-import { fetchListingsRequest } from "../../redux/slices/listingsSlice";
-import ListPagination from "../../../components/shared/ListPagination";
-import { fetchCategoriesRequest } from "../../redux/sagas/categoriesSaga";
-import { fetchProvincesRequest } from "../../redux/sagas/locationsSaga";
+import { Listing } from "../../app/types";
+import { fetchListingsRequest } from "../../app/redux/slices/listingsSlice";
+import ListPagination from "../shared/ListPagination";
+import { fetchCategoriesRequest } from "../../app/redux/sagas/categoriesSaga";
+import { fetchProvincesRequest } from "../../app/redux/sagas/locationsSaga";
 import {
   Select,
   SelectContent,

@@ -123,14 +123,13 @@ class ApiClient {
     return response.data;
   };
 
-  login = async (data: LoginRequest): Promise<ApiResponse<AuthResponse>> => {
-    const response = await this.client.post<ApiResponse<AuthResponse>>(
+  login = async (data: LoginRequest): Promise<AuthResponse> => {
+    const response = await this.client.post<AuthResponse>(
       "/auth/login",
       data
     );
-    console.log("HERE RESPONSE : ", response);
-    localStorage.setItem("accessToken", response.data.data.accessToken);
-    localStorage.setItem("refreshToken", response.data.data.refreshToken);
+    localStorage.setItem("accessToken", response.data.accessToken);
+    localStorage.setItem("refreshToken", response.data.refreshToken);
     return response.data;
   };
 

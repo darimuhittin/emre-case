@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Mail, Lock } from "lucide-react";
-import { RootState } from "../../redux/store";
+import { RootState } from "../../app/redux/store";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { loginRequest } from "../../redux/sagas/authSaga";
+import { loginRequest } from "../../app/redux/sagas/authSaga";
 
 // Define schema with Zod
 const loginSchema = z.object({

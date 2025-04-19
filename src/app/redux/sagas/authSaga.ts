@@ -52,10 +52,11 @@ function* loginWorker(action: PayloadAction<LoginCredentials>) {
   try {
     yield put(setLoading(true));
     const response = yield call(apiClient.login, action.payload);
-    yield put(loginSuccess(response.data));
+    console.log("HERE RESPONSE LOGIN: ", response);
+    yield put(loginSuccess(response));
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;
-    console.log("HERE ERROR : ", axiosError);
+    console.log("HERE ERROR LOGIN: ", axiosError);
     yield put(
       loginFailure(axiosError.response?.data?.message || "Login failed")
     );
@@ -110,9 +111,6 @@ function* verifyEmailWorker(action: PayloadAction<string>) {
     yield put(setLoading(true));
     yield call(apiClient.verifyEmail, action.payload);
     yield put(verifyEmailSuccess());
-
-    // Refresh user profile after email verification
-    yield put(fetchUserProfileRequest());
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;
     yield put(

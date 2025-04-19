@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Mail, Lock, KeyRound, User } from "lucide-react";
-import { RootState } from "../../redux/store";
-import { registerRequest } from "../../redux/sagas/authSaga";
+import { RootState } from "../../app/redux/store";
+import { registerRequest } from "../../app/redux/sagas/authSaga";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -47,10 +47,10 @@ const RegisterForm: React.FC = () => {
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      email: "",
-      password: "",
-      confirmPassword: "",
-      name: "",
+      email: "darimuhittin@gmail.com",
+      password: "123456",
+      confirmPassword: "123456",
+      name: "Dari Muhittin",
     },
   });
 

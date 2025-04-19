@@ -1,5 +1,5 @@
 import React from "react";
-import ListingsList from "../components/listings/ListingsList";
+import ListingsList from "../../components/listings/ListingsList";
 
 export default function ListingsPage() {
   return (

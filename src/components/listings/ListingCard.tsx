@@ -1,6 +1,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Listing } from "../../types";
+import { Listing } from "../../app/types";
 import Image from "next/image";
 interface ListingCardProps {
   listing: Listing;

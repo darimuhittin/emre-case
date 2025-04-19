@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { RootState } from "../redux/store";
-import RegisterForm from "../components/auth/RegisterForm";
+import RegisterForm from "../../components/auth/RegisterForm";
 import Link from "next/link";
 
 export default function Register() {

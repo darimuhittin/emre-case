@@ -14,6 +14,12 @@ const initialState: ListingsState = {
   isLoading: false,
   error: null,
   filters: {},
+  createListingLoading: false,
+  createListingError: null,
+  updateListingLoading: false,
+  updateListingError: null,
+  deleteListingLoading: false,
+  deleteListingError: null,
 };
 
 // Listings slice
@@ -73,26 +79,26 @@ const listingsSlice = createSlice({
 
     // Create listing
     createListingRequest: (state) => {
-      state.isLoading = true;
-      state.error = null;
+      state.createListingLoading = true;
+      state.createListingError = null;
     },
     createListingSuccess: (state, action: PayloadAction<Listing>) => {
-      state.isLoading = false;
+      state.createListingLoading = false;
       state.listings = [action.payload, ...state.listings];
       state.totalListings += 1;
     },
     createListingFailure: (state, action: PayloadAction<string>) => {
-      state.isLoading = false;
-      state.error = action.payload;
+      state.createListingLoading = false;
+      state.createListingError = action.payload;
     },
 
     // Update listing
     updateListingRequest: (state) => {
-      state.isLoading = true;
-      state.error = null;
+      state.updateListingLoading = true;
+      state.updateListingError = null;
     },
     updateListingSuccess: (state, action: PayloadAction<Listing>) => {
-      state.isLoading = false;
+      state.updateListingLoading = false;
       state.listings = state.listings.map((listing) =>
         listing.id === action.payload.id ? action.payload : listing
       );
@@ -101,17 +107,17 @@ const listingsSlice = createSlice({
       }
     },
     updateListingFailure: (state, action: PayloadAction<string>) => {
-      state.isLoading = false;
-      state.error = action.payload;
+      state.updateListingLoading = false;
+      state.updateListingError = action.payload;
     },
 
     // Delete listing
     deleteListingRequestStart: (state) => {
-      state.isLoading = true;
-      state.error = null;
+      state.deleteListingLoading = true;
+      state.deleteListingError = null;
     },
     deleteListingSuccess: (state, action: PayloadAction<string>) => {
-      state.isLoading = false;
+      state.deleteListingLoading = false;
       state.listings = state.listings.filter(
         (listing) => listing.id !== action.payload
       );
@@ -121,8 +127,8 @@ const listingsSlice = createSlice({
       }
     },
     deleteListingFailure: (state, action: PayloadAction<string>) => {
-      state.isLoading = false;
-      state.error = action.payload;
+      state.deleteListingLoading = false;
+      state.deleteListingError = action.payload;
     },
 
     // Upload listing image

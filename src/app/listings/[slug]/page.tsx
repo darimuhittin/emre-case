@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import ListingDetails from "../../components/listings/ListingDetails";
+import ListingDetails from "../../../components/listings/ListingDetails";
 
 interface AdPageProps {
   params: {

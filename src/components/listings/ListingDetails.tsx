@@ -4,12 +4,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 
-import { RootState } from "../../redux/store";
+import { RootState } from "../../app/redux/store";
 import Link from "next/link";
 import {
   fetchListingRequest,
   deleteListingRequest,
-} from "../../redux/sagas/listingsSaga";
+} from "../../app/redux/sagas/listingsSaga";
 import Image from "next/image";
 import {
   Carousel,
@@ -19,7 +19,7 @@ import {
   CarouselNext,
   CarouselApi,
 } from "@/components/ui/carousel";
-import { Button } from "../../../components/ui/button";
+import { Button } from "../ui/button";
 import ListingDetailSkeleton from "./ListingDetailSkeleton";
 
 interface AdDetailsProps {
@@ -159,9 +159,8 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
                         <div className="h-[600px]">
                           <Image
                             src={image}
-                            alt={`${selectedListing.title} - Image ${
-                              index + 1
-                            }`}
+                            alt={`${selectedListing.title} - Image ${index + 1
+                              }`}
                             width={1000}
                             height={1000}
                             className="object-contain w-full h-full"
@@ -191,11 +190,10 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
                   onClick={() => {
                     carouselApi?.scrollTo(index);
                   }}
-                  className={`flex-shrink-0 w-16 h-16 p-0 rounded overflow-hidden border-2 ${
-                    slideInView === index
+                  className={`flex-shrink-0 w-16 h-16 p-0 rounded overflow-hidden border-2 ${slideInView === index
                       ? "border-primary-500"
                       : "border-transparent opacity-50"
-                  }`}
+                    }`}
                 >
                   <Image
                     src={image}

@@ -70,6 +70,13 @@ export interface ListingsState {
     districtId?: string;
     search?: string;
   };
+
+  createListingLoading: boolean;
+  createListingError: string | null;
+  updateListingLoading: boolean;
+  updateListingError: string | null;
+  deleteListingLoading: boolean;
+  deleteListingError: string | null;
 }
 
 export interface CategoriesState {

@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.variable} antialiase`}>
+      <body className={`${poppins.variable} antialiase bg-secondary-800`}>
         <Providers>{children}</Providers>
       </body>
     </html>

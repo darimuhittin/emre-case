@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { RootState } from "../redux/store";
-import LoginForm from "../components/auth/LoginForm";
+import LoginForm from "../../components/auth/LoginForm";
 import Link from "next/link";
 
 export default function Login() {
