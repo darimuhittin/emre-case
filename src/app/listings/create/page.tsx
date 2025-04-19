@@ -3,11 +3,19 @@ import ListingForm from "@/components/listings/ListingForm";
 
 export default function CreateListing() {
   return (
-    <div className="container mx-auto py-10 px-4 ">
-      <h1 className="text-3xl font-bold text-center mb-8 text-white">
-        Post a New Listing
-      </h1>
-      <ListingForm />
+    <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <div className="mb-10 text-center">
+        <h1 className="text-4xl font-extrabold text-white mb-2">
+          Post a New Listing
+        </h1>
+        <p className="text-gray-400 max-w-2xl mx-auto">
+          Create your professional listing and reach our community of interested buyers.
+        </p>
+      </div>
+
+      <div className="bg-gray-800/50 rounded-xl shadow-2xl backdrop-blur-sm border border-gray-700">
+        <ListingForm />
+      </div>
     </div>
   );
 }

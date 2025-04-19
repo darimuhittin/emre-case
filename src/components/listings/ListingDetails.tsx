@@ -126,41 +126,40 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mx-auto bg-neutral-50">
+      <div className="mx-auto">
         {/* Breadcrumb */}
-        <div className="mb-6">
-          <Link href="/" className="text-blue-600 hover:underline">
+        <div className="mb-6 bg-white/10 p-3 rounded-lg backdrop-blur-sm">
+          <Link href="/" className="text-blue-400 hover:text-blue-300">
             Home
           </Link>
           {" > "}
-          <Link href="/ads" className="text-blue-600 hover:underline">
+          <Link href="/ads" className="text-blue-400 hover:text-blue-300">
             Ads
           </Link>
           {" > "}
           <Link
             href={`/ads?category=${selectedListing.category}`}
-            className="text-blue-600 hover:underline"
+            className="text-blue-400 hover:text-blue-300"
           >
             {selectedListing.category.name}
           </Link>
           {" > "}
-          <span className="text-gray-600">{selectedListing.title}</span>
+          <span className="text-gray-300">{selectedListing.title}</span>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md overflow-hidden border border-neutral-200">
+        <div className="bg-neutral-800 rounded-lg shadow-xl overflow-hidden border border-neutral-700">
           {/* Image carousel */}
-          <div className="relative bg-gray-200 *:border *:border-neutral-200">
+          <div className="relative bg-neutral-900">
             {selectedListing.images && selectedListing.images.length > 0 ? (
-              <Carousel setApi={setCarouselApi}>
+              <Carousel setApi={setCarouselApi} className="w-full">
                 <CarouselContent>
                   {selectedListing.images.map(
                     (image: string, index: number) => (
-                      <CarouselItem key={index} className="h-[600px]">
-                        <div className="h-[600px]">
+                      <CarouselItem key={index} className="h-[500px]">
+                        <div className="h-[500px] flex items-center justify-center">
                           <Image
                             src={image}
-                            alt={`${selectedListing.title} - Image ${index + 1
-                              }`}
+                            alt={`${selectedListing.title} - Image ${index + 1}`}
                             width={1000}
                             height={1000}
                             className="object-contain w-full h-full"
@@ -170,11 +169,11 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
                     )
                   )}
                 </CarouselContent>
-                <CarouselPrevious className="left-4" />
-                <CarouselNext className="right-4" />
+                <CarouselPrevious className="left-4 bg-neutral-800/70 hover:bg-neutral-700 border-neutral-600" />
+                <CarouselNext className="right-4 bg-neutral-800/70 hover:bg-neutral-700 border-neutral-600" />
               </Carousel>
             ) : (
-              <div className="w-full h-96 flex items-center justify-center">
+              <div className="w-full h-96 flex items-center justify-center bg-neutral-800">
                 <span className="text-gray-400">No image available</span>
               </div>
             )}
@@ -182,7 +181,7 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
 
           {/* Thumbnails */}
           {selectedListing.images && selectedListing.images.length > 1 && (
-            <div className="py-2 px-4 bg-gray-100 flex space-x-2 overflow-x-auto">
+            <div className="py-3 px-4 bg-neutral-900 flex space-x-2 overflow-x-auto">
               {selectedListing.images.map((image: string, index: number) => (
                 <Button
                   variant="ghost"
@@ -191,8 +190,8 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
                     carouselApi?.scrollTo(index);
                   }}
                   className={`flex-shrink-0 w-16 h-16 p-0 rounded overflow-hidden border-2 ${slideInView === index
-                      ? "border-primary-500"
-                      : "border-transparent opacity-50"
+                    ? "border-blue-500"
+                    : "border-transparent opacity-50"
                     }`}
                 >
                   <Image
@@ -209,53 +208,53 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
 
           <div className="p-6">
             {/* Title and price */}
-            <div className="flex flex-col md:flex-row justify-between md:items-center mb-4">
-              <h1 className="text-3xl font-bold text-gray-800 mb-2 md:mb-0">
+            <div className="flex flex-col md:flex-row justify-between md:items-center mb-6">
+              <h1 className="text-3xl font-bold text-white mb-2 md:mb-0">
                 {selectedListing.title}
               </h1>
-              <div className="text-2xl font-bold text-blue-600">
+              <div className="text-2xl font-bold text-blue-400 bg-blue-900/30 px-4 py-2 rounded-lg">
                 {formatPrice(selectedListing.price)}
               </div>
             </div>
 
             {/* Meta information */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              <span className="px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700">
+            <div className="flex flex-wrap gap-2 mb-8">
+              <span className="px-3 py-1 rounded-full text-sm bg-blue-900/50 text-blue-300 border border-blue-700">
                 {selectedListing.category.name}
               </span>
-              <span className="px-3 py-1 rounded-full text-sm bg-green-100 text-green-700">
+              <span className="px-3 py-1 rounded-full text-sm bg-green-900/50 text-green-300 border border-green-700">
                 {selectedListing.district.province.name}
               </span>
-              <span className="px-3 py-1 rounded-full text-sm bg-purple-100 text-purple-700">
+              <span className="px-3 py-1 rounded-full text-sm bg-purple-900/50 text-purple-300 border border-purple-700">
                 {selectedListing.district.name}
               </span>
-              <span className="px-3 py-1 rounded-full text-sm bg-gray-100 text-gray-700">
+              <span className="px-3 py-1 rounded-full text-sm bg-neutral-800 text-gray-300 border border-neutral-700">
                 Posted: {formatDate(selectedListing.createdAt)}
               </span>
             </div>
 
             {/* Description */}
-            <div className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-800 mb-2">
+            <div className="mb-8 bg-neutral-900/50 p-4 rounded-lg border border-neutral-800">
+              <h2 className="text-xl font-semibold text-gray-100 mb-3">
                 Description
               </h2>
-              <p className="text-gray-600 whitespace-pre-line">
+              <p className="text-gray-300 whitespace-pre-line">
                 {selectedListing.description}
               </p>
             </div>
 
             {/* Owner actions */}
             {isOwner && (
-              <div className="flex flex-col sm:flex-row gap-3 mt-8 pt-6 border-t border-gray-200">
+              <div className="flex flex-col sm:flex-row gap-3 mt-8 pt-6 border-t border-neutral-700">
                 <Link
                   href={`/ads/edit/${selectedListing.id}`}
-                  className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-center font-medium"
+                  className="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-center font-medium transition-colors"
                 >
                   Edit Advertisement
                 </Link>
                 <button
                   onClick={handleDeleteAd}
-                  className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md font-medium"
+                  className="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-md font-medium transition-colors"
                 >
                   Delete Advertisement
                 </button>
@@ -264,8 +263,8 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
 
             {/* Contact button (for non-owners) */}
             {!isOwner && isAuthenticated && (
-              <div className="mt-8 pt-6 border-t border-gray-200">
-                <button className="w-full sm:w-auto px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-md font-medium">
+              <div className="mt-8 pt-6 border-t border-neutral-700">
+                <button className="w-full sm:w-auto px-6 py-3 bg-green-600 hover:bg-green-500 text-white rounded-md font-medium transition-colors">
                   Contact Seller
                 </button>
               </div>
@@ -273,12 +272,14 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
 
             {/* Login prompt for unauthenticated users */}
             {!isAuthenticated && (
-              <div className="mt-8 pt-6 border-t border-gray-200">
-                <p className="mb-4 text-gray-600">
+              <div className="mt-8 pt-6 border-t border-neutral-700">
+                <p className="mb-4 text-gray-300">
                   You need to be logged in to contact the seller.
                 </p>
                 <Link href="/login">
-                  <Button variant="default">Login to Contact</Button>
+                  <Button variant="default" className="bg-blue-600 hover:bg-blue-700 transition-colors">
+                    Login to Contact
+                  </Button>
                 </Link>
               </div>
             )}

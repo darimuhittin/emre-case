@@ -58,7 +58,9 @@ function PaginationLink({
           variant: isActive ? "outline" : "ghost",
           size,
         }),
-        className
+        className,
+        "bg-gray-800/60 border-gray-700 focus:border-indigo-500 transition-all focus:ring-1 focus:ring-indigo-500 text-white cursor-pointer",
+        isActive && "bg-indigo-500 text-white"
       )}
       {...props}
     />

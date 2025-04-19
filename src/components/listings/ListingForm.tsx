@@ -33,6 +33,8 @@ import { fetchProvincesRequest } from "@/app/redux/sagas/locationsSaga";
 import { fetchCategoriesRequest } from "@/app/redux/sagas/categoriesSaga";
 import { Skeleton } from "../ui/skeleton";
 import Image from "next/image";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "../ui/select";
+import { Textarea } from "../ui/textarea";
 // Action creator helper types to match saga expectations
 const createListing = (data: ListingFormData) =>
   createListingRequest(data as ListingFormData);
@@ -105,8 +107,8 @@ const ListingForm: React.FC<ListingFormProps> = ({
         provinces?.[Math.floor(Math.random() * provinces.length)]?.districts?.[
           Math.floor(
             Math.random() *
-              provinces[Math.floor(Math.random() * provinces.length)].districts
-                .length
+            provinces[Math.floor(Math.random() * provinces.length)].districts
+              .length
           )
         ]?.id ||
         "",
@@ -191,46 +193,45 @@ const ListingForm: React.FC<ListingFormProps> = ({
   }
 
   return (
-    <div className="max-w-4xl mx-auto  rounded-xl shadow-md border p-8 transition-all bg-secondary-100">
-      <div className="space-y-6">
-        <div className="pb-4 border-b">
-          <h2 className="text-2xl font-bold text-primary">
+    <div className="p-8 backdrop-filter">
+      <div className="space-y-8">
+        <div className="pb-6 border-b border-gray-700">
+          <h2 className="text-2xl font-bold text-white">
             {isEditing ? "Edit Listing" : "Create New Listing"}
           </h2>
-          <p className="text-muted-foreground">
-            Fill in the details to {isEditing ? "update your" : "post a new"}{" "}
-            listing
+          <p className="text-gray-400 mt-1">
+            Fill in the details to {isEditing ? "update your" : "post a new"} listing
           </p>
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="grid grid-cols-1 gap-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
+            <div className="grid grid-cols-1 gap-10">
               {/* Basic Information Section */}
               <div className="space-y-6">
                 <div className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
-                    <Tag className="h-5 w-5 text-primary" />
+                  <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center mr-3">
+                    <Tag className="h-5 w-5 text-indigo-400" />
                   </div>
-                  <h3 className="text-lg font-semibold">Basic Information</h3>
+                  <h3 className="text-lg font-semibold text-white">Basic Information</h3>
                 </div>
 
-                <div className="pl-12 space-y-4">
+                <div className="pl-12 space-y-6">
                   {/* Title */}
                   <FormField
                     control={form.control}
                     name="title"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-medium">Title *</FormLabel>
+                        <FormLabel className="font-medium text-gray-300">Title *</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Enter a descriptive title"
                             {...field}
-                            className="transition-all focus:shadow-sm"
+                            className="bg-gray-800/60 border-gray-700 focus:border-indigo-500 transition-all focus:ring-1 focus:ring-indigo-500"
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-400" />
                       </FormItem>
                     )}
                   />
@@ -241,18 +242,18 @@ const ListingForm: React.FC<ListingFormProps> = ({
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-medium">
+                        <FormLabel className="font-medium text-gray-300">
                           Description *
                         </FormLabel>
                         <FormControl>
-                          <textarea
+                          <Textarea
                             {...field}
                             placeholder="Provide details about your item"
                             rows={5}
-                            className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all resize-none"
+                            className="flex w-full rounded-md border border-gray-700 bg-gray-800/60 px-3 py-2 text-sm ring-offset-background placeholder:text-gray-500 focus:border-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 transition-all resize-none"
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-400" />
                       </FormItem>
                     )}
                   />
@@ -262,36 +263,39 @@ const ListingForm: React.FC<ListingFormProps> = ({
               {/* Category & Price Section */}
               <div className="space-y-6">
                 <div className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
-                    <DollarSign className="h-5 w-5 text-primary" />
+                  <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center mr-3">
+                    <DollarSign className="h-5 w-5 text-indigo-400" />
                   </div>
-                  <h3 className="text-lg font-semibold">Category & Price</h3>
+                  <h3 className="text-lg font-semibold text-white">Category & Price</h3>
                 </div>
 
-                <div className="pl-12 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="pl-12 grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Category */}
                   <FormField
                     control={form.control}
                     name="categoryId"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-medium">
+                        <FormLabel className="font-medium text-gray-300">
                           Category *
                         </FormLabel>
                         <FormControl>
-                          <select
+                          <Select
                             {...field}
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all"
                           >
-                            <option value="">Select a category</option>
-                            {categories.map((category) => (
-                              <option key={category.id} value={category.id}>
-                                {category.name}
-                              </option>
-                            ))}
-                          </select>
+                            <SelectTrigger className="bg-gray-800/60 border-gray-700 focus:border-indigo-500 transition-all focus:ring-1 focus:ring-indigo-500 w-full">
+                              <SelectValue placeholder="Select a category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {categories.map((category) => (
+                                <SelectItem key={category.id} value={category.id}>
+                                  {category.name}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-400" />
                       </FormItem>
                     )}
                   />
@@ -302,7 +306,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
                     name="price"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-medium">
+                        <FormLabel className="font-medium text-gray-300">
                           Price (₺) *
                         </FormLabel>
                         <FormControl>
@@ -311,11 +315,11 @@ const ListingForm: React.FC<ListingFormProps> = ({
                             min="0"
                             step="1"
                             placeholder="Enter the price"
-                            className="transition-all focus:shadow-sm"
+                            className="bg-gray-800/60 border-gray-700 focus:border-indigo-500 transition-all focus:ring-1 focus:ring-indigo-500"
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-400" />
                       </FormItem>
                     )}
                   />
@@ -325,10 +329,10 @@ const ListingForm: React.FC<ListingFormProps> = ({
               {/* Location Section */}
               <div className="space-y-6">
                 <div className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
-                    <MapPinned className="h-5 w-5 text-primary" />
+                  <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center mr-3">
+                    <MapPinned className="h-5 w-5 text-indigo-400" />
                   </div>
-                  <h3 className="text-lg font-semibold">Location</h3>
+                  <h3 className="text-lg font-semibold text-white">Location</h3>
                 </div>
 
                 <div className="pl-12">
@@ -337,28 +341,26 @@ const ListingForm: React.FC<ListingFormProps> = ({
                     name="districtId"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-medium">
+                        <FormLabel className="font-medium text-gray-300">
                           District *
                         </FormLabel>
                         <FormControl>
-                          <select
-                            {...field}
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all"
-                          >
-                            <option value="">Select a district</option>
-                            {provinces.flatMap((province) =>
-                              province.districts.map((district) => (
-                                <option
-                                  key={`${province.name}-${district.name}`}
-                                  value={district.id}
-                                >
-                                  {district.name} ({province.name})
-                                </option>
-                              ))
-                            )}
-                          </select>
+                          <Select>
+                            <SelectTrigger className="bg-gray-800/60 border-gray-700 focus:border-indigo-500 transition-all focus:ring-1 focus:ring-indigo-500 w-full">
+                              <SelectValue placeholder="Select a district" />
+                            </SelectTrigger>
+                            <SelectContent >
+                              {provinces.flatMap((province) =>
+                                province.districts.map((district) => (
+                                  <SelectItem key={district.id} value={district.id}>
+                                    {district.name} ({province.name})
+                                  </SelectItem>
+                                ))
+                              )}
+                            </SelectContent>
+                          </Select>
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="text-red-400" />
                       </FormItem>
                     )}
                   />
@@ -368,14 +370,14 @@ const ListingForm: React.FC<ListingFormProps> = ({
               {/* Images Section */}
               <div className="space-y-6">
                 <div className="flex items-center">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
-                    <ImageIcon className="h-5 w-5 text-primary" />
+                  <div className="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center mr-3">
+                    <ImageIcon className="h-5 w-5 text-indigo-400" />
                   </div>
-                  <h3 className="text-lg font-semibold">Images</h3>
+                  <h3 className="text-lg font-semibold text-white">Images</h3>
                 </div>
 
-                <div className="pl-12 space-y-4">
-                  <div className="border-2 border-dashed border-input rounded-lg bg-background/50 p-6 text-center transition-colors hover:bg-background">
+                <div className="pl-12 space-y-6">
+                  <div className="border-2 border-dashed border-gray-700 rounded-lg bg-gray-800/30 p-8 text-center transition-colors hover:bg-gray-800/50">
                     <input
                       id="images"
                       name="images"
@@ -386,16 +388,16 @@ const ListingForm: React.FC<ListingFormProps> = ({
                       className="hidden"
                     />
                     <label htmlFor="images" className="cursor-pointer block">
-                      <div className="mx-auto w-16 h-16 rounded-full bg-primary/5 flex items-center justify-center mb-4">
-                        <ImageIcon className="h-8 w-8 text-primary/60" />
+                      <div className="mx-auto w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center mb-4">
+                        <ImageIcon className="h-8 w-8 text-indigo-400" />
                       </div>
-                      <span className="text-primary font-medium">
+                      <span className="text-indigo-400 font-medium">
                         Click to upload
                       </span>{" "}
-                      <span className="text-muted-foreground">
+                      <span className="text-gray-400">
                         or drag and drop
                       </span>
-                      <p className="text-xs text-muted-foreground mt-2">
+                      <p className="text-xs text-gray-500 mt-2">
                         PNG, JPG, GIF up to 5MB
                       </p>
                     </label>
@@ -404,14 +406,14 @@ const ListingForm: React.FC<ListingFormProps> = ({
                   {/* Image previews */}
                   {imagePreviews.length > 0 && (
                     <div className="mt-6">
-                      <h4 className="text-sm font-medium mb-3">
+                      <h4 className="text-sm font-medium text-gray-300 mb-3">
                         Image Previews
                       </h4>
                       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                         {imagePreviews.map((src, index) => (
                           <div
                             key={index}
-                            className="relative group rounded-md overflow-hidden shadow-sm border"
+                            className="relative group rounded-md overflow-hidden shadow-lg border border-gray-700"
                           >
                             <Image
                               src={src}
@@ -423,7 +425,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
                             <button
                               type="button"
                               onClick={() => removeImage(index)}
-                              className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white"
+                              className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white"
                             >
                               Remove
                             </button>
@@ -437,12 +439,12 @@ const ListingForm: React.FC<ListingFormProps> = ({
             </div>
 
             {/* Submit Button */}
-            <div className="pt-4 border-t">
+            <div className="pt-6 border-t border-gray-700">
               <div className="flex justify-end">
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="px-8 py-2 h-12 transition-all"
+                  className="px-8 py-2 h-12 bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition-all"
                 >
                   {isLoading ? (
                     <>

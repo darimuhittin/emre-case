@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "../ui/input";
 
 const ListingsList: React.FC = () => {
   const dispatch = useDispatch();
@@ -46,6 +48,10 @@ const ListingsList: React.FC = () => {
     dispatch(fetchProvincesRequest());
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(fetchListingsRequest(filters));
+  }, [JSON.stringify(filters)]);
+
   // Handle clear filters
   const handleClearFilters = () => {
     dispatch(clearFilters());
@@ -63,8 +69,22 @@ const ListingsList: React.FC = () => {
       <h2 className="text-2xl font-bold mb-6">Browse Advertisements</h2>
 
       {/* Filters */}
-      <div className="bg-secondary-100/90 p-4 rounded-lg shadow-md mb-6">
+      <div className="p-4 rounded-lg shadow-md mb-6 bg-gray-800/60 border border-gray-700">
         <div className="flex flex-col md:flex-row md:items-center gap-4">
+          <div className="flex-1">
+            <Label htmlFor="search">Search</Label>
+            <Input
+              id="search"
+              type="text"
+              placeholder="Search listings..."
+              value={filters.search || ""}
+              onChange={(e) => {
+                dispatch(setFilters({ search: e.target.value }))
+              }
+              }
+              className="w-full"
+            />
+          </div>
           <div className="flex-1">
             <Label htmlFor="category">Category</Label>
             <Select
@@ -74,7 +94,7 @@ const ListingsList: React.FC = () => {
                 dispatch(setFilters({ categoryId: value }));
               }}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full ">
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
               <SelectContent>
@@ -109,6 +129,8 @@ const ListingsList: React.FC = () => {
             </Select>
           </div>
 
+
+
           <div className="flex-0 self-end">
             <Button onClick={handleClearFilters} variant="outline">
               Clear Filters
@@ -126,8 +148,30 @@ const ListingsList: React.FC = () => {
 
       {/* Loading state */}
       {isLoading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          {[...Array(12)].map((_, index) => (
+            <div key={index} className="bg-gray-800/60 border border-gray-700 rounded-lg overflow-hidden">
+              {/* Skeleton image */}
+              <Skeleton className="w-full h-48" />
+              {/* Skeleton content */}
+              <div className="p-4 space-y-3">
+                {/* Title */}
+                <Skeleton className="h-6 w-3/4" />
+                {/* Price */}
+                <Skeleton className="h-5 w-1/3" />
+                {/* Description */}
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-full" />
+                </div>
+                {/* Footer info */}
+                <div className="pt-2 flex justify-between">
+                  <Skeleton className="h-4 w-1/4" />
+                  <Skeleton className="h-4 w-1/4" />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         <>
@@ -145,8 +189,8 @@ const ListingsList: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="bg-gray-100 p-8 rounded-lg text-center">
-              <p className="text-gray-600 text-lg">No advertisements found</p>
+            <div className=" p-8 rounded-lg text-center bg-gray-800/60 border border-gray-700 ">
+              <p className="   text-lg text-white">No advertisements found</p>
               <p className="text-gray-500 mt-2">Try adjusting your filters</p>
             </div>
           )}
