@@ -11,7 +11,7 @@ interface AdPageProps {
 
 export default function AdPage({ params }: AdPageProps) {
   return (
-    <div className="py-8 bg-primary-700">
+    <div className="py-8 ">
       <ListingDetails slug={params.slug} />
     </div>
   );

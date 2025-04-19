@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Mail, Lock, KeyRound } from "lucide-react";
+import { Mail, Lock, KeyRound, User } from "lucide-react";
 import { RootState } from "../../redux/store";
 import { registerRequest } from "../../redux/sagas/authSaga";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
+import { useRouter } from "next/navigation";
 // Define schema with Zod
 const registerSchema = z
   .object({
@@ -29,6 +29,7 @@ const registerSchema = z
       .min(6, "Password must be at least 6 characters")
       .min(1, "Password is required"),
     confirmPassword: z.string().min(1, "Confirm password is required"),
+    name: z.string().min(1, "Name is required"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords must match",
@@ -38,6 +39,7 @@ const registerSchema = z
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 const RegisterForm: React.FC = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const { isLoading, error } = useSelector((state: RootState) => state.auth);
 
@@ -48,12 +50,17 @@ const RegisterForm: React.FC = () => {
       email: "",
       password: "",
       confirmPassword: "",
+      name: "",
     },
   });
 
-  // Handle form submission
   const onSubmit = (values: RegisterFormValues) => {
-    dispatch(registerRequest(values));
+    console.log(values);
+    const response = dispatch(registerRequest(values));
+    if (response) {
+      console.log("HERE RESPONSE : ", response);
+      // router.push("/login");
+    }
   };
 
   return (
@@ -66,6 +73,21 @@ const RegisterForm: React.FC = () => {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="flex items-center gap-2">
+                  <User className="h-4 w-4" /> Name
+                </FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="email"

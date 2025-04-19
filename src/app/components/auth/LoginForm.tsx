@@ -43,6 +43,7 @@ const LoginForm: React.FC = () => {
 
   // Handle form submission
   const onSubmit = (values: LoginFormValues) => {
+    console.log(values);
     dispatch(loginRequest(values));
   };
 

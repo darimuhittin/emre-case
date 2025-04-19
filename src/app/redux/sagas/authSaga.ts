@@ -16,7 +16,6 @@ import {
   verifyEmailFailure,
   setLoading,
 } from "../slices/authSlice";
-
 // Create action types for saga
 export const LOGIN_REQUEST = "auth/loginRequest";
 export const REGISTER_REQUEST = "auth/registerRequest";
@@ -54,11 +53,9 @@ function* loginWorker(action: PayloadAction<LoginCredentials>) {
     yield put(setLoading(true));
     const response = yield call(apiClient.login, action.payload);
     yield put(loginSuccess(response.data));
-
-    // Fetch user profile after successful login
-    yield put(fetchUserProfileRequest());
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;
+    console.log("HERE ERROR : ", axiosError);
     yield put(
       loginFailure(axiosError.response?.data?.message || "Login failed")
     );
@@ -70,14 +67,6 @@ function* registerWorker(action: PayloadAction<RegisterCredentials>) {
     yield put(setLoading(true));
     yield call(apiClient.register, action.payload);
     yield put(registerSuccess());
-
-    // After registration, automatically log the user in
-    yield put(
-      loginRequest({
-        email: action.payload.email,
-        password: action.payload.password,
-      })
-    );
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;
     yield put(

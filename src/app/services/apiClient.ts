@@ -16,6 +16,7 @@ import {
   CreateDistrictRequest,
   CreateCategoryRequest,
   ApiResponseMultiple,
+  RegisterResponse,
 } from "./api.d";
 
 const API_URL = "http://localhost:8000";
@@ -57,7 +58,11 @@ class ApiClient {
         const originalRequest = error.config;
 
         // If 401 error and not already retrying
-        if (error.response?.status === 401 && !originalRequest._retry) {
+        if (
+          error.response?.status === 401 &&
+          !originalRequest._retry &&
+          originalRequest.url !== "/auth/login"
+        ) {
           originalRequest._retry = true;
 
           try {
@@ -107,13 +112,14 @@ class ApiClient {
   };
 
   // Auth Endpoints
-  register = async (
-    data: RegisterRequest
-  ): Promise<ApiResponse<AuthResponse>> => {
-    const response = await this.client.post<ApiResponse<AuthResponse>>(
+  register = async (data: RegisterRequest): Promise<RegisterResponse> => {
+    const response = await this.client.post<RegisterResponse>(
       "/auth/register",
       data
     );
+    if (response.data.verificationToken) {
+      window.location.href = `/register/verify/${response.data.verificationToken}`;
+    }
     return response.data;
   };
 
@@ -122,7 +128,7 @@ class ApiClient {
       "/auth/login",
       data
     );
-    // Store tokens
+    console.log("HERE RESPONSE : ", response);
     localStorage.setItem("accessToken", response.data.data.accessToken);
     localStorage.setItem("refreshToken", response.data.data.refreshToken);
     return response.data;

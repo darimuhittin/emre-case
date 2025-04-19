@@ -155,8 +155,8 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
                 <CarouselContent>
                   {selectedListing.images.map(
                     (image: string, index: number) => (
-                      <CarouselItem key={index} className="h-[400px]">
-                        <div className="h-[400px]">
+                      <CarouselItem key={index} className="h-[600px]">
+                        <div className="h-[600px]">
                           <Image
                             src={image}
                             alt={`${selectedListing.title} - Image ${
@@ -194,7 +194,7 @@ const ListingDetails: React.FC<AdDetailsProps> = ({ slug }) => {
                   className={`flex-shrink-0 w-16 h-16 p-0 rounded overflow-hidden border-2 ${
                     slideInView === index
                       ? "border-primary-500"
-                      : "border-transparent"
+                      : "border-transparent opacity-50"
                   }`}
                 >
                   <Image

@@ -65,6 +65,10 @@ export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
 }
+export interface RegisterResponse {
+  message: string;
+  verificationToken: string;
+}
 
 export interface TokenRefreshRequest {
   refreshToken: string;

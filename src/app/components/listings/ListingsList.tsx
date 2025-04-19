@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters, clearFilters } from "../../redux/slices/adsSlice";
@@ -8,6 +9,16 @@ import { fetchListingsRequest } from "../../redux/slices/listingsSlice";
 import ListPagination from "../../../components/shared/ListPagination";
 import { fetchCategoriesRequest } from "../../redux/sagas/categoriesSaga";
 import { fetchProvincesRequest } from "../../redux/sagas/locationsSaga";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+
 const ListingsList: React.FC = () => {
   const dispatch = useDispatch();
   const {
@@ -36,16 +47,11 @@ const ListingsList: React.FC = () => {
 
   // Handle filter changes
   const handleFilterChange = (
-    e: React.ChangeEvent<HTMLSelectElement>,
+    value: string,
     filterType: "category" | "province"
   ) => {
-    const value = e.target.value === "All" ? "" : e.target.value;
-
-    if (filterType === "category") {
-      dispatch(setFilters({ category: value }));
-    } else if (filterType === "province") {
-      dispatch(setFilters({ province: value }));
-    }
+    const filteredValue = value === "All" ? "" : value;
+    dispatch(setFilters({ [filterType]: filteredValue }));
   };
 
   // Handle clear filters
@@ -68,56 +74,51 @@ const ListingsList: React.FC = () => {
       <div className="bg-white p-4 rounded-lg shadow-md mb-6">
         <div className="flex flex-col md:flex-row md:items-center gap-4">
           <div className="flex-1">
-            <label
-              htmlFor="category"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Category
-            </label>
-            <select
-              id="category"
-              name="category"
+            <Label htmlFor="category">Category</Label>
+            <Select
               value={filters.categoryId || "All"}
-              onChange={(e) => handleFilterChange(e, "category")}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onValueChange={(value) => handleFilterChange(value, "category")}
             >
-              {categories?.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All</SelectItem>
+                {categories?.map((category) => (
+                  <SelectItem key={category.id} value={category.id}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="flex-1">
-            <label
-              htmlFor="province"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Province
-            </label>
-            <select
-              id="province"
-              name="province"
+            <Label htmlFor="province">Province</Label>
+            <Select
               value={filters.provinceId || "All"}
-              onChange={(e) => handleFilterChange(e, "province")}
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onValueChange={(value) =>
+                dispatch(setFilters({ province: value === "All" ? "" : value }))
+              }
             >
-              {provinces?.map((province) => (
-                <option key={province.id} value={province.id}>
-                  {province.name}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a province" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All</SelectItem>
+                {provinces?.map((province) => (
+                  <SelectItem key={province.id} value={province.id}>
+                    {province.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="flex-0 self-end">
-            <button
-              onClick={handleClearFilters}
-              className="py-2 px-4 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
-            >
+            <Button onClick={handleClearFilters} variant="outline">
               Clear Filters
-            </button>
+            </Button>
           </div>
         </div>
       </div>
