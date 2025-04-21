@@ -5,12 +5,11 @@ import {
 import { ListingFormValues, listingSchema } from "../schemas/listing";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, UseFormReturn } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { Listing } from "@/types/entities/listing";
 import { fetchCategories } from "../redux/slices/categoriesSlice";
 import { fetchProvinces } from "../redux/slices/locationsSlice";
-import { RootState } from "../redux/store";
 
 const MAX_IMAGES = 5;
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
@@ -24,8 +23,6 @@ const useListingForm = (
   removeImage: (image: string) => void;
   imagePreviews: string[];
 } => {
-  const { categories } = useSelector((state: RootState) => state.categories);
-  const { provinces } = useSelector((state: RootState) => state.locations);
   const [imagePreviews, setImagePreviews] = useState<string[]>(
     listing?.images || []
   );
@@ -62,23 +59,6 @@ const useListingForm = (
 
   form.watch("provinceId");
   form.watch("districtId");
-
-  useEffect(() => {
-    if (
-      categories.length > 0 &&
-      provinces.length > 0 &&
-      provinces[0].districts.length > 0
-    ) {
-      form.setValue("title", "Example Title");
-      form.setValue("description", "Example Description for listing");
-      form.setValue("price", "100");
-      form.setValue("categoryId", categories[0].id);
-      form.setValue("provinceId", provinces[0].id);
-      setTimeout(() => {
-        form.setValue("districtId", provinces[0].districts[0].id);
-      }, 1000);
-    }
-  }, [categories, provinces, form]);
 
   const onSubmit = (values: ListingFormValues) => {
     const formData = new FormData();

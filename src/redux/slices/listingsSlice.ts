@@ -13,7 +13,7 @@ const initialState: IListingState = {
   pageSize: 10,
   selectedListing: null,
   selectedListingLoading: true,
-  isLoading: true,
+  isLoading: false,
   error: null,
   filters: {},
   createListingLoading: false,
