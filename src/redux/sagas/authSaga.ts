@@ -100,6 +100,12 @@ function* verifyEmailWorker(action: PayloadAction<string>) {
 
 function* initAuthWorker() {
   try {
+    const accessToken = localStorage.getItem("accessToken");
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (!accessToken || !refreshToken) {
+      yield put(initAuthFailure("No tokens found"));
+      return;
+    }
     const response = yield call(apiClient.getUserProfile);
     yield put(initAuthSuccess(response));
   } catch (error) {
