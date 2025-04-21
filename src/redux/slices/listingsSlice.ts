@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Listing, IListingFilters } from "@/types/entities/listing";
 import { IListingState } from "@/types/redux/listing";
-import { ApiResponseMultiple } from "@/services/api";
+import { ApiResponseMultiple } from "@/types/api";
 import { toast } from "sonner";
 
 // Initial state

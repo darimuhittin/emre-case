@@ -1,8 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AuthState, LoginCredentials, RegisterCredentials, User } from "@/types";
+import { IAuthState } from "@/types/redux/auth";
+import { User } from "@/types/entities/user";
+import { LoginCredentials } from "@/types/login";
+import { RegisterCredentials } from "@/types/register";
 import { toast } from "sonner";
 // Initial state
-const initialState: AuthState = {
+const initialState: IAuthState = {
   user: null,
   accessToken: null,
   refreshToken: null,
@@ -46,14 +49,18 @@ const authSlice = createSlice({
     },
 
     // login request
-    loginRequest: (state, action: PayloadAction<LoginCredentials>) => {
+    loginRequest: (state, _action: PayloadAction<LoginCredentials>) => {
       state.isLoading = true;
       state.loginError = null;
     },
     // Login success
     loginSuccess: (
       state,
-      action: PayloadAction<{ accessToken: string; refreshToken: string; user: User }>
+      action: PayloadAction<{
+        accessToken: string;
+        refreshToken: string;
+        user: User;
+      }>
     ) => {
       state.isLoading = false;
       state.accessToken = action.payload.accessToken;
@@ -71,7 +78,7 @@ const authSlice = createSlice({
       toast.error("Login failed");
     },
     // Register request
-    registerRequest: (state, action: PayloadAction<RegisterCredentials>) => {
+    registerRequest: (state, _action: PayloadAction<RegisterCredentials>) => {
       state.isLoading = true;
       state.registerError = null;
     },
@@ -125,7 +132,7 @@ const authSlice = createSlice({
       state.error = action.payload;
     },
     // Verify email request
-    verifyEmailRequest: (state, action: PayloadAction<string>) => {
+    verifyEmailRequest: (state, _action: PayloadAction<string>) => {
       state.isLoading = true;
       state.error = null;
     },

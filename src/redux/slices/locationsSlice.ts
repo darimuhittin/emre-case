@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LocationsState, Province, District } from "@/types";
-import { ApiResponseMultiple } from "@/services/api";
+import { Province } from "@/types/entities/province";
+import { District } from "@/types/entities/district";
+import { ApiResponseMultiple } from "@/types/api";
+import { ILocationsState } from "@/types/redux/locations";
 // Initial state
-const initialState: LocationsState = {
+const initialState: ILocationsState = {
   provinces: [],
   isLoading: false,
   error: null,

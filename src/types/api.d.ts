@@ -87,22 +87,6 @@ export interface UserProfile {
   updatedAt: string;
 }
 
-// Listing Types
-export interface Listing {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-  images: string[];
-  user: UserProfile;
-  category: Category;
-  district: District;
-  createdAt: string;
-  updatedAt: string;
-  userId: string;
-  slug: string;
-}
-
 export interface ListingResponse {
   items: Listing[];
   total: number;
@@ -118,46 +102,6 @@ export interface CreateListingRequest {
   categoryId: string;
   districtId: string;
 }
-// Category Types
-export interface Category {
-  id: string;
-  name: string;
-  listingsCount: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface CreateCategoryRequest {
   name: string;
-}
-
-// Location Types
-export interface Province {
-  id: string;
-  name: string;
-  districts: District[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface District {
-  id: string;
-  name: string;
-  province: Province;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CreateProvinceRequest {
-  name: string;
-}
-
-export interface CreateDistrictRequest {
-  name: string;
-  provinceId: string;
-}
-
-export interface UpdateDistrictRequest {
-  name: string;
-  provinceId?: string;
 }

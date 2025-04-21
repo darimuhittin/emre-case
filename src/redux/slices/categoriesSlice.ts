@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ApiResponseMultiple } from "@/services/api";
+import { ApiResponseMultiple } from "@/types/api";
 import { Category } from "@/types/entities/category";
 import { CategoriesState } from "../../types/redux/categories";
 

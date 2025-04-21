@@ -1,25 +1,24 @@
 import axios, { AxiosInstance } from "axios";
-import {
-  ApiResponse,
-  LoginRequest,
-  RegisterRequest,
-  AuthResponse,
-  TokenRefreshRequest,
-  UserProfile,
-  Listing,
-  Category,
-  Province,
-  District,
-  CreateProvinceRequest,
-  CreateDistrictRequest,
-  CreateCategoryRequest,
-  ApiResponseMultiple,
-  RegisterResponse,
-} from "./api";
+
 import { navigate } from "./navigationHelper";
 import { toast } from "sonner";
 import { store } from "@/redux/store";
 import { logoutSuccess } from "@/redux/slices/authSlice";
+import {
+  AuthResponse,
+  LoginRequest,
+  RegisterRequest,
+  RegisterResponse,
+  TokenRefreshRequest,
+  UserProfile,
+  ApiResponse,
+  ApiResponseMultiple,
+} from "@/types/api";
+import { Listing } from "@/types/entities/listing";
+import { Category } from "@/types/entities/category";
+import { Province } from "@/types/entities/province";
+import { District } from "@/types/entities/district";
+
 const API_URL = "http://localhost:8000";
 
 class ApiClient {
@@ -255,9 +254,7 @@ class ApiClient {
     return response.data;
   };
 
-  createCategory = async (
-    data: CreateCategoryRequest
-  ): Promise<ApiResponse<Category>> => {
+  createCategory = async (data: Category): Promise<ApiResponse<Category>> => {
     const response = await this.client.post<ApiResponse<Category>>(
       "/categories",
       data
@@ -267,7 +264,7 @@ class ApiClient {
 
   updateCategory = async (
     id: string,
-    data: CreateCategoryRequest
+    data: Category
   ): Promise<ApiResponse<Category>> => {
     const response = await this.client.patch<ApiResponse<Category>>(
       `/categories/${id}`,
@@ -307,9 +304,7 @@ class ApiClient {
     return response.data;
   };
 
-  createProvince = async (
-    data: CreateProvinceRequest
-  ): Promise<ApiResponse<Province>> => {
+  createProvince = async (data: Province): Promise<ApiResponse<Province>> => {
     const response = await this.client.post<ApiResponse<Province>>(
       "/locations/provinces",
       data
@@ -317,9 +312,7 @@ class ApiClient {
     return response.data;
   };
 
-  createDistrict = async (
-    data: CreateDistrictRequest
-  ): Promise<ApiResponse<District>> => {
+  createDistrict = async (data: District): Promise<ApiResponse<District>> => {
     const response = await this.client.post<ApiResponse<District>>(
       "/locations/districts",
       data
@@ -329,7 +322,7 @@ class ApiClient {
 
   updateProvince = async (
     id: string,
-    data: CreateProvinceRequest
+    data: Province
   ): Promise<ApiResponse<Province>> => {
     const response = await this.client.patch<ApiResponse<Province>>(
       `/locations/provinces/${id}`,
@@ -340,7 +333,7 @@ class ApiClient {
 
   updateDistrict = async (
     id: string,
-    data: CreateDistrictRequest
+    data: District
   ): Promise<ApiResponse<District>> => {
     const response = await this.client.patch<ApiResponse<District>>(
       `/locations/districts/${id}`,

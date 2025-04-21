@@ -2,7 +2,8 @@ import { takeLatest, put, call, all } from "redux-saga/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import apiClient from "@/services/apiClient";
-import { LoginCredentials, RegisterCredentials } from "@/types";
+import { LoginCredentials } from "@/types/login";
+import { RegisterCredentials } from "@/types/register";
 import {
   loginSuccess,
   loginFailure,
@@ -26,8 +27,6 @@ import {
 import { navigate } from "@/services/navigationHelper";
 // Create action types for saga
 
-
-
 // Worker Sagas
 function* loginWorker(action: PayloadAction<LoginCredentials>) {
   try {
@@ -46,7 +45,6 @@ function* loginWorker(action: PayloadAction<LoginCredentials>) {
 
 function* registerWorker(action: PayloadAction<RegisterCredentials>) {
   try {
-
     yield call(apiClient.register, action.payload);
     yield put(registerSuccess());
   } catch (error) {
@@ -106,7 +104,12 @@ function* initAuthWorker() {
     yield put(initAuthSuccess(response));
   } catch (error) {
     const axiosError = error as AxiosError<{ message: string }>;
-    yield put(initAuthFailure(axiosError.response?.data?.message || "Failed to initialize authentication"));
+    yield put(
+      initAuthFailure(
+        axiosError.response?.data?.message ||
+          "Failed to initialize authentication"
+      )
+    );
   }
 }
 

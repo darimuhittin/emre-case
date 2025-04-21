@@ -2,7 +2,8 @@ import { takeLatest, put, call, all } from "redux-saga/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import apiClient from "@/services/apiClient";
-import { ProvinceFormData, DistrictFormData } from "@/types";
+import { Province } from "@/types/entities/province";
+import { District } from "@/types/entities/district";
 import {
   fetchProvincesSuccess,
   fetchProvincesFailure,
@@ -84,7 +85,7 @@ function* fetchProvinceWorker(action: PayloadAction<string>) {
 //   }
 // }
 
-function* createProvinceWorker(action: PayloadAction<ProvinceFormData>) {
+function* createProvinceWorker(action: PayloadAction<Province>) {
   try {
     const response = yield call(apiClient.createProvince, action.payload);
     yield put(createProvinceSuccess(response.data));
@@ -98,14 +99,14 @@ function* createProvinceWorker(action: PayloadAction<ProvinceFormData>) {
   }
 }
 
-function* createDistrictWorker(action: PayloadAction<DistrictFormData>) {
+function* createDistrictWorker(action: PayloadAction<District>) {
   try {
     const response = yield call(apiClient.createDistrict, action.payload);
 
     // Add the district to the correct province
     yield put(
       createDistrictSuccess({
-        provinceId: action.payload.provinceId,
+        provinceId: action.payload.province.id,
         district: response.data,
       })
     );
@@ -120,7 +121,7 @@ function* createDistrictWorker(action: PayloadAction<DistrictFormData>) {
 }
 
 function* updateProvinceWorker(
-  action: PayloadAction<{ id: string; data: ProvinceFormData }>
+  action: PayloadAction<{ id: string; data: Province }>
 ) {
   try {
     const response = yield call(
@@ -140,7 +141,7 @@ function* updateProvinceWorker(
 }
 
 function* updateDistrictWorker(
-  action: PayloadAction<{ id: string; data: DistrictFormData }>
+  action: PayloadAction<{ id: string; data: District }>
 ) {
   try {
     const response = yield call(
@@ -151,7 +152,7 @@ function* updateDistrictWorker(
 
     // If the province changed, handle that in our reducer
     const provinceId =
-      action.payload.data.provinceId || response.data.province.id;
+      action.payload.data.province.id || response.data.province.id;
 
     // Update the district in the correct province
     yield put(

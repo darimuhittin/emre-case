@@ -2,7 +2,6 @@ import { takeLatest, put, call, all } from "redux-saga/effects";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import apiClient from "@/services/apiClient";
-import { CategoryFormData } from "@/types";
 import {
   fetchCategoriesSuccess,
   fetchCategoriesFailure,
@@ -20,7 +19,7 @@ import {
   updateCategory,
   deleteCategory,
 } from "../slices/categoriesSlice";
-
+import { Category } from "@/types/entities/category";
 // Worker Sagas
 function* fetchCategoriesWorker() {
   try {
@@ -50,7 +49,7 @@ function* fetchCategoryWorker(action: PayloadAction<string>) {
   }
 }
 
-function* createCategoryWorker(action: PayloadAction<CategoryFormData>) {
+function* createCategoryWorker(action: PayloadAction<Category>) {
   try {
     const response = yield call(apiClient.createCategory, action.payload);
     yield put(createCategorySuccess(response.data));
@@ -65,7 +64,7 @@ function* createCategoryWorker(action: PayloadAction<CategoryFormData>) {
 }
 
 function* updateCategoryWorker(
-  action: PayloadAction<{ id: string; data: CategoryFormData }>
+  action: PayloadAction<{ id: string; data: Category }>
 ) {
   try {
     const response = yield call(
